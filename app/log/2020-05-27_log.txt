@@ -1,0 +1,279 @@
+
+
+
+
+2020-05-27 10:42:47 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1161, in _fetchall_impl
+    return self.cursor.fetchall()
+AttributeError: 'NoneType' object has no attribute 'fetchall'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 996, in update_all_companies
+    "update company set category_id=replace(category_id, '[', '')"
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1216, in fetchall
+    e, None, None, self.cursor, self.context
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1478, in _handle_dbapi_exception
+    util.reraise(*exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1211, in fetchall
+    l = self.process_rows(self._fetchall_impl())
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1163, in _fetchall_impl
+    return self._non_result([])
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1168, in _non_result
+    "This result object does not return rows. "
+sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+
+
+
+2020-05-27 10:42:47 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-27 10:43:21 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1161, in _fetchall_impl
+    return self.cursor.fetchall()
+AttributeError: 'NoneType' object has no attribute 'fetchall'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 996, in update_all_companies
+    "update company set category_id=replace(category_id, '[', '')"
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1216, in fetchall
+    e, None, None, self.cursor, self.context
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1478, in _handle_dbapi_exception
+    util.reraise(*exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1211, in fetchall
+    l = self.process_rows(self._fetchall_impl())
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1163, in _fetchall_impl
+    return self._non_result([])
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1168, in _non_result
+    "This result object does not return rows. "
+sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+
+
+
+2020-05-27 10:43:31 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1161, in _fetchall_impl
+    return self.cursor.fetchall()
+AttributeError: 'NoneType' object has no attribute 'fetchall'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 996, in update_all_companies
+    "update company set category_id=replace(category_id, '[', '')"
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1216, in fetchall
+    e, None, None, self.cursor, self.context
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1478, in _handle_dbapi_exception
+    util.reraise(*exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1211, in fetchall
+    l = self.process_rows(self._fetchall_impl())
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1163, in _fetchall_impl
+    return self._non_result([])
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\result.py", line 1168, in _non_result
+    "This result object does not return rows. "
+sqlalchemy.exc.ResourceClosedError: This result object does not return rows. It has been closed automatically.
+
+
+
+
+2020-05-27 10:43:31 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-27 15:32:24 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1697, in system
+    page = 1
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\system.html", line 240, in top-level template code
+    {{ item.label }}
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'item' is undefined
+
+
+
+
+2020-05-27 15:32:24 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-27 15:32:25 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1697, in system
+    page = 1
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\system.html", line 240, in top-level template code
+    {{ item.label }}
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'item' is undefined
+
+
+
+
+2020-05-27 15:32:26 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-27 15:32:45 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1697, in system
+    page = 1
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\system.html", line 240, in top-level template code
+    {{ item.label }}
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'item' is undefined
+
+
+
+
+2020-05-27 15:32:45 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.

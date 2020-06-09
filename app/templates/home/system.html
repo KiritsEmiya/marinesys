@@ -1,0 +1,2729 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title>海事服务管理系统</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename = 'base/images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap-movie.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/animate.css') }}">
+    <script src="{{ url_for('static',filename = 'base/js/vue.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/axios.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/element-ui.js') }}"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/element-ui.css') }}">
+    <style>
+    [v-cloak] {
+            display: none;
+    }
+    .text {
+        font-size: 14px;
+    }
+    .item {
+        padding: 5px 0;
+    }
+    .el-tabs__content {
+        height:calc(100% - 39px);
+        padding:0;
+    }
+    .box-card {
+        width: 49%;
+        height: 200px;
+        margin-left: 5px;
+    }
+    </style>
+    <style>
+        .shadow-color{
+            background-image:linear-gradient(to right , #009999,#7A88FF );
+        }
+        .navbar-brand>img {
+            display: inline;
+        }
+        .media{
+            padding:3px;
+            border:1px solid #ccc
+        }
+        html{
+            overflow: hidden;
+            height:100%";
+        }
+        body {
+            height: 100%;
+            overflow: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0;
+        }
+    </style>
+	<style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            width: 100px;
+            height: 100px;
+          }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
+        .avatar-uploader {
+            height: 100px;
+        }
+        .el-button+.el-button {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+  </style>
+</head>
+
+<body>
+<!--导航-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container" >
+        <!--小屏幕导航按钮和logo-->
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{{ url_for('home.index',page = 1) }}" class="navbar-brand" style="width:350px;">
+                <img src="{{ url_for('static',filename = 'base/images/logo.png') }}" style="height:40px;">&nbsp;海事服务管理系统
+            </a>
+        </div>
+        <!--小屏幕导航按钮和logo-->
+        <!--导航-->
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-left" role="search" style="margin-top:18px;">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" placeholder="请输入企业名称" id="key_movie" value="{{ key }}" style="width:210px;">
+                    <input type="text" style="display:none;">
+                    <span class="input-group-btn">
+                        <a class="btn btn-default" id="do_search"><span class="glyphicon glyphicon-search"></span>&nbsp;搜索 </a>
+                    </span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if "user" not in session %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.login') }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.register') }}"><span class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
+                </li>
+                {% endif %}
+                {% if "user" in session %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.logout') }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.user') }}"><span class="glyphicon glyphicon-user"></span>&nbsp;用户</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.system') }}"><span class="glyphicon glyphicon-home"></span>&nbsp;系统</a>
+                </li>
+            </ul>
+        </div>
+        <!--导航-->
+    </div>
+</nav>
+<!--导航-->
+<div id="app" v-cloak style="height:100%;background:url({{ url_for('static',filename = 'base/images/background.jpg') }})" class="shadow-color">
+    <el-drawer title="企业管理" :visible.sync="companyView" direction="rtl" size="90%" :with-header="false">
+        <div style="height:100%;width:100%;display:flex;justify-content:center;align-items:center;">
+            <div style="display:flex;flex-direction:column;flex-wrap:wrap;align-items:center;width:3%;height:95%;">
+                <div style="color:#0099FF;font-size:20px;">企</div>
+                <div style="color:#0099FF;font-size:20px;">业</div>
+                <div style="color:#0099FF;font-size:20px;">管</div>
+                <div style="color:#0099FF;font-size:20px;">理</div>
+            </div>
+            <div style="width:97%;height:100%;">
+                <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                    <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                        <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入企业名称" @keyup.enter.native="searchCompaniesByName" v-model.trim="searchCompanyKey" class="input-with-select" suffix-icon="el-icon-search">
+                            <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchCompaniesByName">搜索</el-button>
+                        </el-input>
+                        <el-select style="width:300px;margin-right:10px;" size="medium" v-model="companyCategoryId" @change="searchCompaniesByName" placeholder="请选择类别">
+                            <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                        <el-select style="width:120px;margin-right:10px;" size="medium" v-model="companyAddTime" @change="searchCompaniesByName" placeholder="请选择时间">
+                            <el-option label="一天之内" value="1"></el-option>
+                            <el-option label="三天之内" value="3"></el-option>
+                            <el-option label="一周之内" value="7"></el-option>
+                            <el-option label="一月之内" value="30"></el-option>
+                            <el-option label="三月之内" value="92"></el-option>
+                            <el-option label="半年之内" value="182"></el-option>
+                            <el-option label="一年之内" value="365"></el-option>
+                        </el-select>
+                    </div>
+                    <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                        <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addCompanyView">新增</el-button>
+                        <el-button style="margin-left:10px;" type="primary" plain size="medium"  @click="editCompanyBtn">修改</el-button>
+                        <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteCompanyBtn">删除</el-button>
+                        <el-button style="margin-left:10px;" type="success"f size="medium"  @click="updateCompanyNewsBtn">新闻更新</el-button>
+                    </div>
+                </div>
+                <div style="width:100%;height:calc(100% - 66px);display:flex;justify-content:center;align-items:center;">
+                    <div style="width:48%;height:100%;">
+                        <template>
+                            <el-table :data="allCompanies" v-loadmore="companyPage" size="mini" border style="text-align:center;width:100%;" height="100%" highlight-current-row @row-click="showCompanyDetails">
+                                <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                <el-table-column prop="name" label="企业名称"></el-table-column>
+                                <el-table-column label="联系方式" prop="telephone" width="115"></el-table-column>
+                                <el-table-column label="添加时间" prop="found_time" width="115"></el-table-column>
+                            </el-table>
+                        </template>
+                    </div>
+                    <div style="height:100%;width:52%;padding-left:20px;padding-top:70px;padding-right:30px;overflow:auto;">
+                        <el-form :disabled="companyDisabled" label-width="80px" style="height:100%;width:100%;" size="medium">
+                            <el-form-item label="企业名称" style="margin-bottom:10px">
+                                <el-input v-model.trim="company.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="企业Logo" style="margin-bottom:10px">
+                                <el-upload class="avatar-uploader" action="/company_logo"
+                                  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                                  <img v-if="company.logo" :src="company.logo" class="avatar">
+                                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="中文名" style="margin-bottom:10px">
+                                        <el-input v-model="company.chs_name"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="简称" style="margin-bottom:10px">
+                                        <el-input v-model="company.abbr"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="成立时间" style="margin-bottom:10px">
+                                        <div class="block">
+                                            <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model="company.found_time" type="date"></el-date-picker>
+                                        </div>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="官网" style="margin-bottom:10px">
+                                        <el-input v-model="company.website"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="企业简介" style="margin-bottom:10px">
+                                <el-input :autosize="{ minRows: 3, maxRows: 3}" type="textarea" v-model.trim="company.profile"></el-input>
+                            </el-form-item>
+                            <el-form-item label="核心成员" style="margin-bottom:10px">
+                                <div style="margin-top:3px;display:flex;align-items:stretch;width:100%;height:100%;min-height:74px;">
+                                    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;align-content:flex-start;height:100%;min-height:74px;width:calc(100% - 70px);border-radius:4px 0 0 4px;border: 1px solid #DCDFE6;padding:8px 0 0 10px;">
+                                        <template v-if="!companyDisabled">
+                                            <el-tag style="margin-right:10px;margin-bottom:8px;" v-for="item in companyContactsList" size="small" :value="item.id" type="primary" :key="item.id" @click="memberTagClick(item)">
+                                                <el-link type="primary" style="text-decoration:none">{[ item.name ]}</el-link>
+                                            </el-tag>
+                                        </template>
+                                        <template v-else>
+                                            <el-tag style="margin-right:10px;margin-bottom:8px;" v-for="item in companyContactsList" size="small" :value="item.id" type="info" :key="item.id" @click="memberTagClick(item)">
+                                                <el-link type="info" style="text-decoration:none">{[ item.name ]}</el-link>
+                                            </el-tag>
+                                        </template>
+                                    </div>
+                                    <div style="width:70px;display:flex;align-items:stretch;">
+                                        <el-button style="border-radius:0 4px 4px 0;" type="primary" plain size="medium"  @click="addContactsTag">新增</el-button>
+                                    </div>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="所属行业" style="margin-bottom:10px">
+                                <el-select multiple style="width:100%" v-model.trim="company.category_id" placeholder="">
+                                    <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="地址" style="margin-bottom:10px">
+                                <el-input v-model.trim="company.address"></el-input>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="联系方式" style="margin-bottom:10px">
+                                        <el-input v-model.trim="company.telephone"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="传真" style="margin-bottom:10px">
+                                        <el-input v-model.trim="company.facsimile"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="企业邮箱" style="margin-bottom:10px">
+                                <el-input v-model.trim="company.email"></el-input>
+                            </el-form-item>
+                            <el-form-item label="关键词" style="margin-bottom:10px">
+                                <el-select v-model.trim="company.keyword" no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="">
+                                    <el-option-group v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                                        <el-option v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                                    </el-option-group>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item style="margin-bottom:0px;">
+                                <div style="text-align:center;margin-left:-70px">
+                                    <el-button type="primary" @click="addCompany">保 存</el-button>
+                                    <el-button type="info" @click="companyDisabled = true">取 消</el-button>
+                                </div>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </el-drawer>
+    <el-drawer title="通讯录管理" :visible.sync="contactsView" direction="rtl" size="90%" :with-header="false">
+        <div style="height:100%;width:100%;display:flex;justify-content:center;align-items:center;">
+            <div style="display:flex;flex-direction:column;flex-wrap:wrap;align-items:center;width:3%;height:95%;">
+                <div style="color:#0099FF;font-size:20px;">通</div>
+                <div style="color:#0099FF;font-size:20px;">讯</div>
+                <div style="color:#0099FF;font-size:20px;">录</div>
+                <div style="color:#0099FF;font-size:20px;">管</div>
+                <div style="color:#0099FF;font-size:20px;">理</div>
+            </div>
+            <div style="width:97%;height:100%;">
+                <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                    <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                        <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入联系人名称" @keyup.enter.native="searchContacts" v-model.trim="contactsKey" class="input-with-select" suffix-icon="el-icon-search">
+                            <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchContacts">搜索</el-button>
+                        </el-input>
+                        <el-select v-model.trim="contactsCompanyId" @focus="setMinWidth" size="medium" @change="searchContacts" :remote-method="remoteSearch" style="width:300px;margin-right:10px;" :loading="loading" remote filterable placeholder="请选择企业">
+                            <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                        </el-select>
+
+                        <el-select style="width:120px;margin-right:10px;" size="medium" v-model="contactsDate" @change="searchContacts" placeholder="请选择时间">
+                            <el-option label="一天之内" value="1"></el-option>
+                            <el-option label="三天之内" value="3"></el-option>
+                            <el-option label="一周之内" value="7"></el-option>
+                            <el-option label="一月之内" value="30"></el-option>
+                            <el-option label="三月之内" value="92"></el-option>
+                            <el-option label="半年之内" value="182"></el-option>
+                            <el-option label="一年之内" value="365"></el-option>
+                        </el-select>
+                    </div>
+                    <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                        <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addContactsView">新增</el-button>
+                        <el-button style="margin-left:10px;" type="success" plain size="medium"  @click="editContactsView">修改</el-button>
+                        <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteContacts(0)">删除</el-button>
+                    </div>
+                </div>
+                <div style="width:100%;height:calc(100% - 66px);display:flex;justify-content:center;align-items:center;">
+                    <div style="width:48%;height:100%;">
+                        <template>
+                            <el-table :data="contactsList" v-loadmore="contactsPage" size="mini" border style="text-align:center;width:100%;" height="100%" highlight-current-row @row-click="showContactsDetails">
+                                <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                <el-table-column prop="name" label="联系人姓名" width="115"></el-table-column>
+                                <el-table-column prop="current_company" label="企业名称"></el-table-column>
+                                <el-table-column prop="telephone" label="联系方式" width="115"></el-table-column>
+                                <el-table-column prop="add_time" label="添加时间" width="115"></el-table-column>
+                            </el-table>
+                        </template>
+                    </div>
+                    <div style="height:100%;width:52%;padding-left:20px;padding-top:70px;padding-right:30px;overflow:auto;">
+                        <el-form :disabled="contactsDisabled" :model="contacts" label-width="80px" style="height:100%;width:100%;" size="medium">
+                            <el-form-item label="姓名" style="margin-bottom:10px">
+                                <el-input v-model.trim="contacts.name"></el-input>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="职位" style="margin-bottom:10px">
+                                        <el-input v-model.trim="contacts.position"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="电话" style="margin-bottom:10px">
+                                        <el-input v-model.trim="contacts.telephone"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="中文名" style="margin-bottom:10px">
+                                        <el-input v-model.trim="contacts.chs_name"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="性别" style="margin-bottom:10px">
+                                        <el-select v-model.trim="contacts.sex" style="width:100%;" size="medium" placeholder="">
+                                            <el-option label="男" value="1"></el-option>
+                                            <el-option label="女" value="0"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="邮箱" style="margin-bottom:10px">
+                                <el-input v-model.trim="contacts.email"></el-input>
+                            </el-form-item>
+                            <el-form-item label="当前任职" style="margin-bottom:10px">
+                                <div style="margin-top:3px;display:flex;align-items:stretch;width:100%;height:100%;">
+                                    <div style="display:flex;flex-wrap:wrap;align-items:center;height:100%;width:calc(100% - 70px);">
+                                        <el-select v-model.trim="contacts.current_company" @focus="setMinWidth" size="medium" :remote-method="remoteSearch" style="width:100%;height:100%;border-radius:4px 0 0 4px;" :loading="loading" remote filterable placeholder="">
+                                            <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                        </el-select>
+                                    </div>
+                                    <div style="width:70px;display:flex;align-items:stretch;">
+                                        <el-button style="border-radius:0 4px 4px 0;" type="primary" plain size="medium"  @click="addCurrentCompanyView">新增</el-button>
+                                    </div>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="历史任职" style="margin-bottom:10px">
+                                <el-select v-model.trim="contacts.history_company"  @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote multiple filterable placeholder="">
+                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.history_id" :label="item.name" :value="item.company_id"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="个人简介" style="margin-bottom:15px">
+                                <el-input v-model.trim="contacts.profile" placeholder="" :autosize="{ minRows: 4, maxRows: 6}" type="textarea"></el-input>
+                            </el-form-item>
+                            <el-form-item label="地址" style="margin-bottom:10px">
+                                <el-input v-model.trim="contacts.address"></el-input>
+                            </el-form-item>
+                            <el-form-item style="margin-bottom:0px;">
+                                <div style="text-align:center;margin-left:-70px">
+                                    <el-button type="primary" @click="addContactsBtn(0)">保 存</el-button>
+                                    <el-button type="info" @click="contactsDisabled = true">取 消</el-button>
+                                </div>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </el-drawer>
+    <el-drawer title="新闻管理" :visible.sync="newsView" direction="rtl" :with-header="false" size="90%">
+        <div style="height:100%;width:100%;display:flex;justify-content:center;align-items:center;">
+            <div style="display:flex;flex-direction:column;flex-wrap:wrap;align-items:center;width:3%;height:95%;">
+                <div style="color:#0099FF;font-size:20px;">新</div>
+                <div style="color:#0099FF;font-size:20px;">闻</div>
+                <div style="color:#0099FF;font-size:20px;">管</div>
+                <div style="color:#0099FF;font-size:20px;">理</div>
+            </div>
+            <div style="width:97%;height:100%;">
+                <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                    <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                        <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入新闻关键词" @keyup.enter.native="searchNewsByTitle" v-model.trim="searchNewsKey" class="input-with-select" suffix-icon="el-icon-search">
+                            <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchNewsByTitle">搜索</el-button>
+                        </el-input>
+                        <el-select style="width:300px;margin-right:10px;" size="medium" v-model="newsCategoryId" @change="searchNewsByTitle" placeholder="请选择类别">
+                            <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                        <el-select style="width:120px;margin-right:10px;" size="medium" v-model="newsDate" @change="searchNewsByTitle" placeholder="请选择时间">
+                            <el-option label="一天之内" value="1"></el-option>
+                            <el-option label="三天之内" value="3"></el-option>
+                            <el-option label="一周之内" value="7"></el-option>
+                            <el-option label="一月之内" value="30"></el-option>
+                            <el-option label="三月之内" value="92"></el-option>
+                            <el-option label="半年之内" value="182"></el-option>
+                            <el-option label="一年之内" value="365"></el-option>
+                        </el-select>
+                    </div>
+                    <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                        <el-button style="margin-left:10px;" type="success" plain size="medium" @click="watchNewsDetails">查阅</el-button>
+                        <el-button style="margin-left:10px;" type="primary" plain size="medium"  @click="editNews">修改</el-button>
+                        <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteNewsBtn">删除</el-button>
+                        <el-button style="margin-left:10px;" type="primary" size="medium"  @click="timedNewsView">定时新闻</el-button>
+                    </div>
+                </div>
+                <div style="width:100%;height:calc(100% - 66px);display:flex;justify-content:center;align-items:center;">
+                    <div style="width:48%;height:100%;">
+                        <template>
+                          <el-table :data="manageNewsList" v-loadmore="newsPage" border height="100%" size="mini" highlight-current-row @row-click="showNewsDetails">
+                            <el-table-column fixed prop="id" label="ID" width="50"></el-table-column>
+                            <el-table-column prop="title" label="标题"></el-table-column>
+                            <el-table-column prop="keyword" label="关键词" width="200"></el-table-column>
+                            <el-table-column prop="date" label="时间" width="100"></el-table-column>
+                          </el-table>
+                        </template>
+                    </div>
+                    <div style="height:100%;width:52%;padding-left:20px;padding-top:70px;padding-right:30px;overflow:auto;">
+                        <el-form :model="news">
+                            <el-form-item label="新闻标题" prop="title" :label-width="formLabelWidth">
+                                <el-input v-model="news.title" readonly placeholder="请输入新闻标题" ></el-input>
+                            </el-form-item>
+                            <el-form-item label="新闻简介" prop="profile" style="margin-bottom:27px;" :label-width="formLabelWidth">
+                                <el-input v-model="news.profile" readonly placeholder="请输入新闻简介" :autosize="{ minRows: 4, maxRows: 6}" type="textarea"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新闻日期" prop="date" :label-width="formLabelWidth">
+                                <el-input v-model="news.date" readonly placeholder="暂无新闻日期" ></el-input>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="新闻类别" prop="category" :label-width="formLabelWidth">
+                                        <el-input v-model="news.category" readonly placeholder="暂无新闻类别" ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="新闻影响" prop="effect" :label-width="formLabelWidth">
+                                        <el-input v-model="news.effect" readonly placeholder="暂无新闻影响" ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="相关企业" :label-width="formLabelWidth">
+                                <el-input v-model="news.company_id" readonly placeholder='暂无新闻相关企业' autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="关键词组" prop="keyword" :label-width="formLabelWidth">
+                                <el-select v-model="news.keyword" disabled popper-append-to-body no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="请输入企业关键词">
+                                    <el-option-group popper-append-to-body v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                                        <el-option popper-append-to-body v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                                    </el-option-group>
+                                </el-select>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </el-drawer>
+    <el-drawer title="新闻详情" :visible.sync="newsInner" direction="rtl" :with-header="false" size="50%">
+        <div style="height:100%;width:100%;padding:20px;padding-bottom:20px;" v-html="newsContent"></div>
+    </el-drawer>
+    <el-drawer title="数据管理" :visible.sync="dataView" direction="rtl" :with-header="false" size="90%">
+        <div style="height:100%;width:100%;display:flex;justify-content:center;align-items:center;">
+            <div style="display:flex;flex-direction:column;flex-wrap:wrap;align-items:center;width:3%;height:95%;">
+                <div style="color:#0099FF;font-size:20px;">数</div>
+                <div style="color:#0099FF;font-size:20px;">据</div>
+                <div style="color:#0099FF;font-size:20px;">管</div>
+                <div style="color:#0099FF;font-size:20px;">理</div>
+            </div>
+            <div style="width:97%;height:100%;">
+                <el-tabs type="border-card" style="width:100%;height:100%;"  @tab-click="onTabClick" v-model="tabView">
+                    <el-tab-pane label="二手船" style="width:100%;height:100%;" name="secondhandShip">
+                        <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                            <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                                <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入船名" @keyup.enter.native="searchSecondhandShip" v-model.trim="secondhandKey" class="input-with-select" suffix-icon="el-icon-search">
+                                    <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchSecondhandShip">搜索</el-button>
+                                </el-input>
+                                <el-select style="width:220px;margin-right:10px;" size="medium" v-model.trim="secondhandType" @change="searchSecondhandShip" placeholder="请选择类别">
+                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                </el-select>
+                                <el-select style="width:120px;margin-right:10px;" size="medium" v-model="secondhandDate" @change="searchSecondhandShip" placeholder="请选择时间">
+                                    <el-option label="一天之内" value="1"></el-option>
+                                    <el-option label="三天之内" value="3"></el-option>
+                                    <el-option label="一周之内" value="7"></el-option>
+                                    <el-option label="一月之内" value="30"></el-option>
+                                    <el-option label="三月之内" value="92"></el-option>
+                                    <el-option label="半年之内" value="182"></el-option>
+                                    <el-option label="一年之内" value="365"></el-option>
+                                </el-select>
+                            </div>
+                            <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                                <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addSecondhandShipView">新增</el-button>
+                                <el-button style="margin-left:10px;" type="success" plain size="medium"  @click="editSecondhandShipView">修改</el-button>
+                                <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteSecondhandShip">删除</el-button>
+                            </div>
+                        </div>
+                        <div style="height:calc(100% - 66px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                            <div style="width:48%;height:100%;">
+                                <template>
+                                    <el-table :data="secondhandShipList" v-loadmore="secondhandShipPage" size="mini" border height="100%" highlight-current-row @row-click="showSecondhandShipDetails">
+                                        <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                        <el-table-column prop="name" label="船名"></el-table-column>
+                                        <el-table-column prop="buyers_abbr" label="买方" width="100">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.buyers" type="primary" style="text-decoration:none">{[ scope.row.buyers_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.buyers_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="sellers_abbr" label="卖方" width="100">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.sellers" type="primary" style="text-decoration:none">{[ scope.row.sellers_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.sellers_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="date" label="交船时间" width="100"></el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                            <div  style="width:52%;height:100%;padding:70px 30px 0 20px;overflow:auto;">
+                                <el-form :disabled="secondhandShipDisabled" label-width="100px" size="medium">
+                                    <el-form-item label="NAME" style="margin-bottom:10px">
+                                        <el-input v-model.trim="secondhandShip.name"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="SIZE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.size"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="TYPE" style="margin-bottom:10px">
+                                                <el-select style="width:100%;" size="medium" v-model.trim="secondhandShip.type" placeholder="">
+                                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="BUILT" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="secondhandShip.built" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="DWT" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.dwt"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="YARD" style="margin-bottom:10px">
+                                        <el-input v-model.trim="secondhandShip.yard"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="M/E" style="margin-bottom:15px">
+                                        <el-input v-model.trim="secondhandShip.main_engine"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="SS" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="secondhandShip.special_survey" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="DD" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="secondhandShip.dry_docking" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="GEAR" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.gear"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="HULL" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.hull"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="8">
+                                            <el-form-item label="BUYER" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.buyers_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="16">
+                                            <el-form-item label="BIND" style="margin-bottom:10px">
+                                                <el-select v-model.trim="secondhandShip.buyers" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="8">
+                                            <el-form-item label="SELLER" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.sellers_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="16">
+                                            <el-form-item label="BIND" style="margin-bottom:10px">
+                                                <el-select v-model.trim="secondhandShip.sellers" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="DATE" style="margin-bottom:10px">
+                                        <div class="block">
+                                            <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="secondhandShip.date" type="date"></el-date-picker>
+                                        </div>
+                                    </el-form-item>
+                                    <el-form-item label="COMMENTS" style="margin-bottom:10px">
+                                        <el-input v-model="secondhandShip.comments"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="PRICE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.price"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="IMO" style="margin-bottom:10px">
+                                                <el-input v-model.trim="secondhandShip.imo"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="TIPS" style="margin-bottom:10px">
+                                        <el-input v-model.trim="secondhandShip.tips"></el-input>
+                                    </el-form-item>
+                                    <el-form-item style="margin-bottom:0px;">
+                                        <div style="text-align:center;margin-left:-70px">
+                                            <el-button type="primary" @click="addSecondhandShipBtn">保 存</el-button>
+                                            <el-button type="info" @click="secondhandShipDisabled = true">取 消</el-button>
+                                        </div>
+                                    </el-form-item>
+                                </el-form>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="新造船" style="width:100%;height:100%;" name="newBuilding">
+                        <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                            <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                                <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入船东名" @keyup.enter.native="searchNewBuilding" v-model.trim="newBuildingKey" class="input-with-select" suffix-icon="el-icon-search">
+                                    <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchNewBuilding">搜索</el-button>
+                                </el-input>
+                                <el-select style="width:220px;margin-right:10px;" size="medium" v-model.trim="newBuildingType" @change="searchNewBuilding" placeholder="请选择类别">
+                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                </el-select>
+                                <el-select style="width:120px;margin-right:10px;" size="medium" v-model="newBuildingDate" @change="searchNewBuilding" placeholder="请选择时间">
+                                    <el-option label="一天之内" value="1"></el-option>
+                                    <el-option label="三天之内" value="3"></el-option>
+                                    <el-option label="一周之内" value="7"></el-option>
+                                    <el-option label="一月之内" value="30"></el-option>
+                                    <el-option label="三月之内" value="92"></el-option>
+                                    <el-option label="半年之内" value="182"></el-option>
+                                    <el-option label="一年之内" value="365"></el-option>
+                                </el-select>
+                            </div>
+                            <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                                <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addNewBuildingView">新增</el-button>
+                                <el-button style="margin-left:10px;" type="success" plain size="medium"  @click="editNewBuildingView">修改</el-button>
+                                <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteNewBuilding">删除</el-button>
+                            </div>
+                        </div>
+                        <div style="height:calc(100% - 66px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                            <div style="width:48%;height:100%;">
+                                <template>
+                                    <el-table :data="newBuildingList" v-loadmore="newBuildingPage" size="mini" border height="100%" highlight-current-row @row-click="showNewBuildingDetails">
+                                        <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                        <el-table-column prop="owner_abbr" label="船东">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.owner" type="primary" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="dwt" label="DWT" width="100"></el-table-column>
+                                        <el-table-column prop="type" label="船型" width="200"></el-table-column>
+                                        <el-table-column prop="date" label="交船时间" width="100"></el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                            <div  style="width:52%;height:100%;padding:70px 30px 0 20px;overflow:auto;">
+                                <el-form :disabled="newBuildingDisabled" label-width="100px" size="medium">
+                                    <el-form-item label="YARD" style="margin-bottom:10px">
+                                        <el-input v-model.trim="newBuilding.yard"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="SIZE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="newBuilding.size"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="TYPE" style="margin-bottom:10px">
+                                                <el-select style="width:100%;" size="medium" v-model.trim="newBuilding.type" placeholder="">
+                                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="BUILT" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="newBuilding.built" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="DWT" style="margin-bottom:10px">
+                                                <el-input v-model.trim="newBuilding.dwt"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="16">
+                                            <el-form-item label="OWNER" style="margin-bottom:10px">
+                                                <el-select v-model.trim="newBuilding.owner" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option disabled v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-form-item label="ABBR" style="margin-bottom:10px">
+                                                <el-input v-model.trim="newBuilding.owner_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="COUNTRY" style="margin-bottom:10px">
+                                        <el-input v-model.trim="newBuilding.country"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="PRICE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="newBuilding.price"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="UNITS" style="margin-bottom:10px">
+                                                <el-input v-model.trim="newBuilding.units"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="DATE" style="margin-bottom:10px">
+                                        <div class="block">
+                                            <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="newBuilding.date" type="date"></el-date-picker>
+                                        </div>
+                                    </el-form-item>
+                                    <el-form-item label="COMMENTS" style="margin-bottom:10px">
+                                        <el-input v-model.trim="newBuilding.comments"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="TIPS" style="margin-bottom:10px">
+                                        <el-input v-model="newBuilding.tips"></el-input>
+                                    </el-form-item>
+
+                                    <el-form-item style="margin-bottom:0px;">
+                                        <div style="text-align:center;margin-left:-70px">
+                                            <el-button type="primary" @click="addNewBuildingBtn">保 存</el-button>
+                                            <el-button type="info" @click="newBuildingDisabled = true">取 消</el-button>
+                                        </div>
+                                    </el-form-item>
+                                </el-form>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="拆船" style="width:100%;height:100%;" name="shipDemolition">
+                        <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                            <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                                <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入船名" @keyup.enter.native="searchShipDemolition" v-model.trim="shipDemolitionKey" class="input-with-select" suffix-icon="el-icon-search">
+                                    <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchShipDemolition">搜索</el-button>
+                                </el-input>
+                                <el-select style="width:220px;margin-right:10px;" size="medium" v-model.trim="shipDemolitionType" @change="searchShipDemolition" placeholder="请选择类别">
+                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                </el-select>
+                                <el-select style="width:120px;margin-right:10px;" size="medium" v-model="shipDemolitionDate" @change="searchShipDemolition" placeholder="请选择时间">
+                                    <el-option label="一天之内" value="1"></el-option>
+                                    <el-option label="三天之内" value="3"></el-option>
+                                    <el-option label="一周之内" value="7"></el-option>
+                                    <el-option label="一月之内" value="30"></el-option>
+                                    <el-option label="三月之内" value="92"></el-option>
+                                    <el-option label="半年之内" value="182"></el-option>
+                                    <el-option label="一年之内" value="365"></el-option>
+                                </el-select>
+                            </div>
+                            <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                                <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addShipDemolitionView">新增</el-button>
+                                <el-button style="margin-left:10px;" type="success" plain size="medium"  @click="editShipDemolitionView">修改</el-button>
+                                <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteShipDemolition">删除</el-button>
+                            </div>
+                        </div>
+                        <div style="height:calc(100% - 66px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                            <div style="width:48%;height:100%;">
+                                <template>
+                                    <el-table :data="shipDemolitionList" v-loadmore="shipDemolitionPage" size="mini" border height="100%" highlight-current-row @row-click="showShipDemolitionDetails">
+                                        <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                        <el-table-column prop="name" label="船名"></el-table-column>
+                                        <el-table-column prop="type" label="船型" width="100"></el-table-column>
+                                        <el-table-column prop="owner" label="船东" width="100">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.owner" type="primary" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="date" label="交船时间" width="100"></el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                            <div  style="width:52%;height:100%;padding:70px 30px 0 20px;overflow:auto;">
+                                <el-form :disabled="shipDemolitionDisabled" label-width="100px" size="medium">
+                                    <el-form-item label="NAME" style="margin-bottom:10px">
+                                        <el-input v-model.trim="shipDemolition.name"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="SIZE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="shipDemolition.size"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="TYPE" style="margin-bottom:10px">
+                                                <el-select style="width:100%;" size="medium" v-model.trim="shipDemolition.type" placeholder="">
+                                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="BUILT" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="shipDemolition.built" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="DWT" style="margin-bottom:10px">
+                                                <el-input v-model.trim="shipDemolition.dwt"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="16">
+                                            <el-form-item label="OWNER" style="margin-bottom:10px">
+                                                <el-select v-model.trim="shipDemolition.owner" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-form-item label="ABBR" style="margin-bottom:10px">
+                                                <el-input v-model.trim="shipDemolition.owner_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="REGION" style="margin-bottom:10px">
+                                        <el-input v-model.trim="shipDemolition.region"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="LDT" style="margin-bottom:10px">
+                                                <el-input v-model.trim="shipDemolition.ldt"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="PRICE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="shipDemolition.price"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="DATE" style="margin-bottom:10px">
+                                        <div class="block">
+                                            <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="shipDemolition.date" type="date"></el-date-picker>
+                                        </div>
+                                    </el-form-item>
+                                    <el-form-item label="COMMENTS" style="margin-bottom:10px">
+                                        <el-input v-model.trim="shipDemolition.comments"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="TIPS" style="margin-bottom:10px">
+                                        <el-input v-model.trim="shipDemolition.tips"></el-input>
+                                    </el-form-item>
+                                    <el-form-item style="margin-bottom:0px;">
+                                        <div style="text-align:center;margin-left:-70px">
+                                            <el-button type="primary" @click="addShipDemolitionBtn">保 存</el-button>
+                                            <el-button type="info" @click="shipDemolitionDisabled = true">取 消</el-button>
+                                        </div>
+                                    </el-form-item>
+                                </el-form>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="期租" style="width:100%;height:100%;" name="timeCharter">
+                        <div  style="background:#DCDFE6;display:flex;justify-content:center;align-items:center;width:100%;height:66px;">
+                            <div  style="display:flex;justify-content:center;align-items:center;width:48%;height:66px;">
+                                <el-input style="width:42%;margin:0 10px;border-radius:4px 0 0 4px;" size="medium" placeholder="请输入船名" @keyup.enter.native="searchTimeCharter" v-model.trim="timeCharterKey" class="input-with-select" suffix-icon="el-icon-search">
+                                    <el-button style="background:#409EFF;color:#FFF;border-radius:0 4px 4px 0;" type="primary" size="medium" slot="append" @click="searchTimeCharter">搜索</el-button>
+                                </el-input>
+                                <el-select style="width:220px;margin-right:10px;" size="medium" v-model.trim="timeCharterType" @change="searchTimeCharter" placeholder="请选择类别">
+                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                </el-select>
+                                <el-select style="width:120px;margin-right:10px;" size="medium" v-model="timeCharterDate" @change="searchTimeCharter" placeholder="请选择时间">
+                                    <el-option label="一天之内" value="1"></el-option>
+                                    <el-option label="三天之内" value="3"></el-option>
+                                    <el-option label="一周之内" value="7"></el-option>
+                                    <el-option label="一月之内" value="30"></el-option>
+                                    <el-option label="三月之内" value="92"></el-option>
+                                    <el-option label="半年之内" value="182"></el-option>
+                                    <el-option label="一年之内" value="365"></el-option>
+                                </el-select>
+                            </div>
+                            <div  style="display:flex;justify-content:center;align-items:center;width:52%;height:66px;">
+                                <el-button style="margin-left:10px;" type="warning" plain size="medium" @click="addTimeCharterView">新增</el-button>
+                                <el-button style="margin-left:10px;" type="success" plain size="medium"  @click="editTimeCharterView">修改</el-button>
+                                <el-button style="margin-left:10px;" type="danger" plain size="medium"  @click="deleteTimeCharter">删除</el-button>
+                            </div>
+                        </div>
+                        <div style="height:calc(100% - 66px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                            <div style="width:48%;height:100%;">
+                                <template>
+                                    <el-table :data="timeCharterList" v-loadmore="timeCharterPage" size="mini" border height="100%" highlight-current-row @row-click="showTimeCharterDetails">
+                                        <el-table-column fixed prop="id" label="ID" width="60"></el-table-column>
+                                        <el-table-column prop="name" label="船名"></el-table-column>
+                                        <el-table-column prop="owner_abbr" label="船东" width="100">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.owner" type="primary" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.owner_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="charterer_abbr" label="租家" width="100">
+                                            <template slot-scope="scope">
+                                                <el-link v-if="scope.row.charterer" type="primary" style="text-decoration:none">{[ scope.row.charterer_abbr ]}</el-link>
+                                                <el-link v-else type="danger" style="text-decoration:none">{[ scope.row.charterer_abbr ]}</el-link>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="date" label="交船时间" width="100"></el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                            <div  style="width:52%;height:100%;padding:70px 30px 0 20px;overflow:auto;">
+                                <el-form :disabled="timeCharterDisabled" label-width="100px" size="medium">
+                                    <el-form-item label="NAME" style="margin-bottom:10px">
+                                        <el-input v-model.trim="timeCharter.name"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="SIZE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.size"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="TYPE" style="margin-bottom:10px">
+                                                <el-select style="width:100%;" size="medium" v-model.trim="timeCharter.type" placeholder="">
+                                                    <el-option v-for="item in shipTypeList" :key="item.id" :label="item.type" :value="item.type"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="BUILT" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="timeCharter.built" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="DWT" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.dwt"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="YARD" style="margin-bottom:10px">
+                                        <el-input v-model.trim="timeCharter.yard"></el-input>
+                                    </el-form-item>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="DELY" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.dely"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="REDLY" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.redly"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="VIA" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.via"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="CARGO" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.cargo"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="DATE" style="margin-bottom:10px">
+                                                <div class="block">
+                                                    <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model.trim="timeCharter.date" type="date"></el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="PERIOD" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.period"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <el-form-item label="RATE" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.rate"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <el-form-item label="IMO" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.imo"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row>
+                                        <el-col :span="16">
+                                            <el-form-item label="OWNER" style="margin-bottom:10px">
+                                                <el-select v-model.trim="timeCharter.owner" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-form-item label="ABBR" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.owner_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="16">
+                                            <el-form-item label="CHARTERER" style="margin-bottom:10px">
+                                                <el-select v-model.trim="timeCharter.charterer" @focus="setMinWidth" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote filterable placeholder="">
+                                                    <el-option v-for="item in resultCompanyName" :style="{'max-width': minWidth + 2 + 'px'}" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-form-item label="ABBR" style="margin-bottom:10px">
+                                                <el-input v-model.trim="timeCharter.charterer_abbr"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-form-item label="TIPS" style="margin-bottom:10px">
+                                        <el-input v-model.trim="timeCharter.tips"></el-input>
+                                    </el-form-item>
+                                    <el-form-item style="margin-bottom:0px;">
+                                        <div style="text-align:center;margin-left:-70px">
+                                            <el-button type="primary" @click="addTimeCharterBtn">保 存</el-button>
+                                            <el-button type="info" @click="timeCharterDisabled = true">取 消</el-button>
+                                        </div>
+                                    </el-form-item>
+                                </el-form>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </div>
+    </el-drawer>
+    <el-dialog title="企业通讯录" center :visible.sync="contactsDialog">
+        <el-form :disabled="companyDisabled" :model="contacts" label-width="80px">
+            <el-form-item label="姓名" style="margin-bottom:10px">
+                <el-input v-model.trim="contacts.name"></el-input>
+            </el-form-item>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="职位" style="margin-bottom:10px">
+                        <el-input v-model.trim="contacts.position"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="电话" style="margin-bottom:10px">
+                        <el-input v-model.trim="contacts.telephone"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="中文名" style="margin-bottom:10px">
+                        <el-input v-model.trim="contacts.chs_name"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="性别" style="margin-bottom:10px">
+                        <el-select v-model.trim="contacts.sex" style="width:100%;" size="medium" placeholder="">
+                            <el-option label="男" value="1"></el-option>
+                            <el-option label="女" value="0"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="邮箱" style="margin-bottom:10px">
+                <el-input v-model.trim="contacts.email"></el-input>
+            </el-form-item>
+            <el-form-item label="历史任职" style="margin-bottom:10px">
+                <el-select v-model.trim="contacts.history_company" :remote-method="remoteSearch" style="width:100%;" :loading="loading" remote multiple filterable placeholder="">
+                    <el-option v-for="item in resultCompanyName" :key="item.company_id" :label="item.name" :value="item.company_id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="个人简介" style="margin-bottom:15px">
+                <el-input v-model.trim="contacts.profile" placeholder="" :autosize="{ minRows: 4, maxRows: 6}" type="textarea"></el-input>
+            </el-form-item>
+            <el-form-item label="地址" style="margin-bottom:10px">
+                <el-input v-model.trim="contacts.address"></el-input>
+            </el-form-item>
+        </el-form>
+        <div v-if="companyContactsBtn" slot="footer" style="align-text:center;margin-top:-30px" class="dialog-footer">
+            <el-button :disabled="companyDisabled" type="primary" @click="addContactsBtn(1)">保 存</el-button>
+            <el-button :disabled="companyDisabled" type="info" @click="contactsDialog = false">取 消</el-button>
+        </div>
+        <div v-else slot="footer" style="align-text:center;margin-top:-30px" class="dialog-footer">
+            <el-button :disabled="companyDisabled" type="success" @click="addContactsBtn(2)">修 改</el-button>
+            <el-button :disabled="companyDisabled" type="danger" @click="deleteContacts(1)">删 除</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="添加企业" center :visible.sync="companyDialog">
+        <el-form label-width="80px" size="medium">
+            <el-form-item label="企业名称" style="margin-bottom:10px">
+                <el-input v-model.trim="company.name"></el-input>
+            </el-form-item>
+            <el-form-item label="企业Logo" style="margin-bottom:10px">
+                <el-upload class="avatar-uploader" action="/company_logo"
+                  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                  <img v-if="company.logo" :src="company.logo" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="中文名" style="margin-bottom:10px">
+                        <el-input v-model="company.chs_name"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="简称" style="margin-bottom:10px">
+                        <el-input v-model="company.abbr"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="成立时间" style="margin-bottom:10px">
+                        <div class="block">
+                            <el-date-picker style="width:100%" value-format="yyyy-MM-dd" v-model="company.found_time" type="date"></el-date-picker>
+                        </div>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="官网" style="margin-bottom:10px">
+                        <el-input v-model="company.website"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="企业简介" style="margin-bottom:10px">
+                <el-input :autosize="{ minRows: 3, maxRows: 3}" type="textarea" v-model.trim="company.profile"></el-input>
+            </el-form-item>
+            <el-form-item label="所属行业" style="margin-bottom:10px">
+                <el-select multiple style="width:100%" v-model.trim="company.category_id" placeholder="">
+                    <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="地址" style="margin-bottom:10px">
+                <el-input v-model.trim="company.address"></el-input>
+            </el-form-item>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="联系方式" style="margin-bottom:10px">
+                        <el-input v-model.trim="company.telephone"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="传真" style="margin-bottom:10px">
+                        <el-input v-model.trim="company.facsimile"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="企业邮箱" style="margin-bottom:10px">
+                <el-input v-model.trim="company.email"></el-input>
+            </el-form-item>
+            <el-form-item label="关键词" style="margin-bottom:10px">
+                <el-select v-model.trim="company.keyword" no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="">
+                    <el-option-group v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                        <el-option v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                    </el-option-group>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" style="align-text:center;margin-top:-30px" class="dialog-footer">
+            <el-button type="primary" @click="addContactsCompany">保 存</el-button>
+            <el-button type="danger" @click="companyDialog = false">取 消</el-button>
+        </div>
+    </el-dialog>
+    <!--内容-->
+    <div class="container" style="height:100%;width:100%;display: flex;align-items:center;justify-content:center;">
+        <el-card shadow="hover" class="box-card" style="text-align:center;width:300px;display:inline-block;padding-top:0px">
+            <a style="margin-top:20px;width:100%;height:100%;" @click="companyManage">
+                <div><span class="glyphicon glyphicon-home" style="margin-top:12px;font-size:80px;"></span></div>
+                <p class="navbar-brand" style="font-size:50px;text-align:center;width:100%;">企业</p>
+            </a>
+        </el-card>
+        <el-card shadow="hover" class="box-card" style="text-align:center;width:300px;display:inline-block;padding-top:0px">
+            <a style="margin-top:20px;width:100%;height:100%;" @click="contactsManage">
+                <div><span class="el-icon-s-custom" style="font-size:95px;"></span></div>
+                <p class="navbar-brand" style="font-size:50px;text-align:center;width:100%;">通讯录</p>
+            </a>
+        </el-card>
+        <el-card shadow="hover" class="box-card" style="text-align:center;width:300px;display:inline-block;padding-top:0px">
+            <a style="margin-top:20px;width:100%;height:100%;" @click="newsManage">
+                <div><span class="glyphicon glyphicon-list-alt" style="margin-top:12px;font-size:80px;"></span></div>
+                <p class="navbar-brand" style="font-size:50px;text-align:center;width:100%;">新闻</p>
+            </a>
+        </el-card>
+        <el-card shadow="hover" class="box-card" style="text-align:center;width:300px;display:inline-block;padding-top:0px">
+            <a style="margin-top:20px;width:100%;height:100%;" @click="dataManage">
+                <div><span class="glyphicon glyphicon-globe" style="margin-top:12px;font-size:80px;"></span></div>
+                <p class="navbar-brand" style="font-size:50px;text-align:center;width:100%;">数据</p>
+            </a>
+        </el-card>
+    </div>
+    <!--内容-->
+    <!--底部-->
+    <footer  class="navbar-fixed-bottom" style="background:#CCCCCC;" ref="bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        版权所有©2009-2020 上海莫瑞斯柯信息技术有限公司
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<!--底部-->
+<script src="{{ url_for('static',filename = 'base/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/jquery.singlePageNav.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/wow.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'lazyload/jquery.lazyload.min.js') }}"></script>
+<script src="//cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+<script>
+    $(function() {
+        new WOW().init();
+    })
+    $(document).ready(function() {
+        $("img.lazy").lazyload({
+            effect: "fadeIn"
+        });
+        $("#do_search").click(function () {
+            var key=$("#key_movie").val().trim();
+            if(key != ""){ location.href = "{{ url_for('home.search') }}?key="+key; }
+        });
+    });
+    $("#key_movie").on("keydown", function(event){
+    　　var key = event.which;
+    　　if(key == 13){
+            var key=$("#key_movie").val().trim();
+            if(key != ""){ location.href = "{{ url_for('home.search') }}?key="+key; }
+    　　}
+    });
+</script>
+<!-- 引入组件库 -->
+<script>
+    var Main = {
+        delimiters: ['{[', ']}'],
+        directives : {
+            loadmore : {
+                bind(el, binding) {
+                    const selectWrap = el.querySelector('.el-table__body-wrapper')
+                    selectWrap.addEventListener('scroll', function() {
+                        let sign = 0
+                        const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+                        if (scrollDistance <= sign) {
+                            binding.value()
+                        }
+                    })
+                }
+            }
+        },
+        data() {
+            return {
+                minWidth : 0,
+                newsInner: false,
+                companyAddView: false,
+                companyView: false,
+                newsView: false,
+                loading: false,                 //是否正在从远程获取数据
+                suggestion_keyword: [{label: '选择或输入关键词',options: null}],
+                companyCurrentPage: 1,          //企业当前页
+                companyTotalPage: 0,            //企业总页数
+                companyNameList: [],            //企业名字集合
+                resultCompanyName: [],          //结果企业名字集合
+                defaultCompanyName: [],         //默认企业名字集合
+                companyDisabled: true,        //企业表单是否可编辑
+                company_id: 0,                  //当前企业id
+                company: {},
+                news_id: 0,                     //当前新闻id
+                news: {
+                    id: 0,
+                    title: '',
+                    profile: '',
+                    date: '',
+                    effect: '',
+                    category: '',
+                    keyword: [],
+                    company_id: ''
+                },
+                newsCurrentPage: 1,
+                newsTotalPage: 0,
+                newsContent: '',
+                allCompanies: [],
+                manageNewsList: [],
+                categories: [],
+                //category: "",
+                readonly: true,
+                imageUrl: '',
+                logo: '',
+                message:'',
+                source:'本 地',
+                newsList: [],
+                formLabelWidth: '80px',
+
+                //企业管理模块
+                searchCompanyKey: '',
+                companyCategoryId: '',      //过滤企业条件,企业类别
+                companyAddTime: '',         //过滤企业条件,企业类别
+                companyDialog: false,       //过滤企业条件,企业类别
+                companyContacts: false,     //企业通讯录对象
+                companyContactsBtn: true,   //过滤企业条件,企业类别
+                companyContactsList: [],    //过滤企业条件,企业类别
+
+                //新闻管理模块
+                searchNewsKey: '',
+                newsCategoryId: '',         //过滤企业条件,企业类别
+                newsDate: '',               //过滤企业条件,企业类别
+
+
+                //通讯录管理模块
+                contacts: {},               //通讯录
+                contactsView: false,        //通讯录视图
+                contactsDisabled: true,     //通讯录表单禁用
+                contactsDialog: false,      //通讯录弹框视图
+                contactsList: [],           //通讯录列表
+                contactsKey: '',            //通讯录搜索关键词
+                contactsCompanyId: '',      //企业通讯录id
+                contactsDate: '',           //通讯录添加时间
+                contactsCurrentPage: 1,     //通讯录当前页
+                contactsTotalPage: 0,       //通讯录总页数
+
+
+                //数据管理模块
+                dataView: false,
+                tabView: 'secondhandShip',      //选项卡视图
+                shipTypeList: [],               //船舶类型列表
+
+                //二手船
+                secondhandShipDisabled: true,
+                secondhandCurrentPage: 1,
+                secondhandTotalPage: 0,
+                secondhandShip: {},
+                secondhandKey: '',              //搜索二手船关键词
+                secondhandType: '',             //二手船类型
+                secondhandDate: '',             //二手船日期
+                secondhandShipList: [],         //二手船列表
+
+                //新造船
+                newBuildingDisabled: true,
+                newBuildingCurrentPage: 1,
+                newBuildingTotalPage: 0,
+                newBuilding: {},
+                newBuildingKey: '',             //搜索新造船关键词
+                newBuildingType: '',            //新造船类型
+                newBuildingDate: '',            //二手船日期
+                newBuildingList: [],            //新造船列表
+
+                //拆船
+                shipDemolitionDisabled: true,
+                demolitionCurrentPage: 1,
+                demolitionTotalPage: 0,
+                shipDemolition: {},
+                shipDemolitionKey: '',          //搜索拆船关键词
+                shipDemolitionType: '',         //拆船类型
+                shipDemolitionDate: '',         //二手船日期
+                shipDemolitionList: [],         //拆船列表
+
+                //期租
+                timeCharterDisabled: true,
+                charterCurrentPage: 1,
+                charterTotalPage: 0,
+                timeCharter: {},
+                timeCharterKey: '',             //搜索期租关键词
+                timeCharterType: '',            //期租类型
+                timeCharterDate: '',            //二手船日期
+                timeCharterList: [],            //期租列表
+            };
+        },
+        methods: {
+            setMinWidth (val) {
+                this.minWidth = val.srcElement.clientWidth
+            },
+            test(value) {
+                console.log(this.company.keyword)
+            },
+            changeDate(value) {
+                this.$forceUpdate()
+            },
+            sleep(ms) {
+                return new Promise(resolve =>
+                    setTimeout(resolve, ms)
+                )
+            },
+
+            //远程搜索企业名称
+            remoteSearch(query_key) {
+                if (query_key !== '') {
+                    this.loading = true;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.resultCompanyName = this.companyNameList.filter(item => {
+                          return item.name.toLowerCase().indexOf(query_key.toLowerCase()) > -1;
+                    });
+                  }, 200);
+                } else {
+                  this.resultCompanyName = [];
+                }
+            },
+            //数据模块
+            dataManage(){
+                this.getSecondhandShipList()
+                this.dataView = true;
+            },
+            //标签页点击事件
+            onTabClick(tab) {
+                console.log(tab.name);
+                if ( tab.name == 'secondhandShip' ) {
+                    this.getSecondhandShipList()
+                };
+                if ( tab.name == 'newBuilding' ) {
+                    this.getNewBuildingList()
+                };
+                if ( tab.name == 'shipDemolition' ) {
+                    this.getShipDemolitionList()
+                };
+                if ( tab.name == 'timeCharter' ) {
+                    this.getTimeCharterList()
+                };
+            },
+
+
+            //二手船模块
+            //获取所有二手船列表
+            getSecondhandShipList(){
+                const url = `/secondhandShip/list`;
+                this.sleep(1000).then(()=>{
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.secondhandShipList = result.secondhand_ships
+                            this.secondhandCurrentPage = 1
+                            this.secondhandTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //分页获取二手船列表
+            secondhandShipPage() {
+                if(this.secondhandCurrentPage < this.secondhandTotalPage){//当前页数小于总页数就请求
+                    this.secondhandCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.secondhandCurrentPage,'page_size':30};
+                const url = `/secondhandShip/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.secondhandShipList.push.apply(this.secondhandShipList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按条件搜索二手船列表
+            searchSecondhandShip(){
+                if( this.secondhandKey=='' && this.secondhandType=='' && this.secondhandDate=='' ){ return false; }
+                const url = `/secondhandShip/name`;
+                para = { key:this.secondhandKey, ship_type:this.secondhandType, ship_date:this.secondhandDate }
+                this.sleep(1000).then(()=>{
+                    axios.post(url, para).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.secondhandShipList = result.result
+                                this.secondhandTotalPage = 1
+                            }
+                            if(result.status == 'err'){this.secondhandShipList = []}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //显示二手船详情
+            showSecondhandShipDetails(scope){
+                console.log('显示二手船详情');
+                this.resultCompanyName = this.defaultCompanyName;
+                this.secondhandShipDisabled = true;
+                const id = scope.id;
+                const url = `/secondhandShip/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){this.secondhandShip = result.result;}
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+            //新增二手船视图
+            addSecondhandShipView(){
+                this.secondhandShipDisabled = false;
+                this.secondhandShip = {};
+            },
+            //新增二手船数据
+            addSecondhandShipBtn(){
+                if(Object.keys(this.secondhandShip).length == 0){
+                    this.$message({ type: 'info', message: '信息不能为空!' });
+                    return false;
+                }
+                const url = `/secondhandShip/add`;
+                axios.post(url,this.secondhandShip).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.defaultCompanyName;
+                            this.$message({ type: 'success', message: result.info });
+                            if(result.op == 'add'){this.secondhandShip = {};};
+                            if(result.op == 'edit'){this.secondhandShipDisabled = true;};
+                            this.getSecondhandShipList();
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //删除二手船数据
+            deleteSecondhandShip(){
+                if(Object.keys(this.secondhandShip).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const id = this.secondhandShip.id;
+                this.$confirm('此操作将删除二手船数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/secondhandShip/delete`;
+                    axios.post(url,{'id':id}).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.$message({ type: 'success', message: result.info });
+                                this.secondhandShip = {};
+                                this.secondhandShipDisabled = true;
+                                this.getSecondhandShipList();
+                            }
+                            if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                }).catch(() => {
+                    this.$message({ type: 'info', message: '取消删除!' });
+                });
+            },
+            //修改二手船视图
+            editSecondhandShipView(){
+                if(Object.keys(this.secondhandShip).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                }
+                const id = this.secondhandShip.id;
+                const url = `/secondhandShip/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.companyNameList;
+                            this.secondhandShip = result.result;
+                            this.secondhandShipDisabled = false;
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+
+
+            //新造船模块
+            //获取所有新造船列表
+            getNewBuildingList(){
+                const url = `/newBuilding/list`;
+                this.sleep(1000).then(()=>{
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.newBuildingList = result.new_buildings
+                            this.newBuildingCurrentPage = 1
+                            this.newBuildingTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //分页获取新造船列表
+            newBuildingPage() {
+                if(this.newBuildingCurrentPage < this.newBuildingTotalPage){//当前页数小于总页数就请求
+                    this.newBuildingCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.newBuildingCurrentPage,'page_size':30};
+                const url = `/newBuilding/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.newBuildingList.push.apply(this.newBuildingList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按条件搜索新造船列表
+            searchNewBuilding(){
+                if( this.newBuildingKey=='' && this.newBuildingType=='' && this.newBuildingDate=='' ){ return false; }
+                const url = `/newBuilding/type`;
+                para = { key:this.newBuildingKey, ship_type:this.newBuildingType, ship_date:this.newBuildingDate }
+                this.sleep(1000).then(()=>{
+                    axios.post(url, para).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.newBuildingList = result.result
+                                this.newBuildingTotalPage = 1
+                            }
+                            if(result.status == 'err'){this.newBuildingList = []}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //显示新造船详情
+            showNewBuildingDetails(scope){
+                console.log('显示新造船详情');
+                this.resultCompanyName = this.defaultCompanyName;
+                this.newBuildingDisabled = true;
+                const id = scope.id;
+                const url = `/newBuilding/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){this.newBuilding = result.result;}
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+            //新增造船视图
+            addNewBuildingView(){
+                this.newBuildingDisabled = false;
+                this.newBuilding = {};
+            },
+            //新增新造船数据
+            addNewBuildingBtn(){
+                if(Object.keys(this.newBuilding).length == 0){
+                    this.$message({ type: 'info', message: '信息不能为空!' });
+                    return false;
+                }
+                const url = `/newBuilding/add`;
+                axios.post(url,this.newBuilding).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.defaultCompanyName;
+                            this.$message({ type: 'success', message: result.info });
+                            if(result.op == 'add'){this.newBuilding = {};};
+                            if(result.op == 'edit'){this.newBuildingDisabled = true;};
+                            this.getNewBuildingList();
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //删除新造船数据
+            deleteNewBuilding(){
+                if(Object.keys(this.newBuilding).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const id = this.newBuilding.id;
+                this.$confirm('此操作将删除新造船数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/newBuilding/delete`;
+                    axios.post(url,{'id':id}).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.$message({ type: 'success', message: result.info });
+                                this.newBuilding = {};
+                                this.newBuildingDisabled = true;
+                                this.getNewBuildingList();
+                            }
+                            if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                }).catch(() => {
+                    this.$message({ type: 'info', message: '取消删除!' });
+                });
+            },
+            //修改新造船视图
+            editNewBuildingView(){
+                if(Object.keys(this.newBuilding).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                }
+                const id = this.newBuilding.id;
+                const url = `/newBuilding/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.companyNameList;
+                            this.newBuilding = result.result;
+                            this.newBuildingDisabled = false;
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+
+            //拆船模块
+            //获取所有拆船列表
+            getShipDemolitionList(){
+                const url = `/shipDemolition/list`;
+                this.sleep(1000).then(()=>{
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.shipDemolitionList = result.ships_demolition
+                            this.demolitionCurrentPage = 1
+                            this.demolitionTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //分页获取拆船列表
+            shipDemolitionPage() {
+                if(this.demolitionCurrentPage < this.demolitionTotalPage){//当前页数小于总页数就请求
+                    this.demolitionCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.demolitionCurrentPage,'page_size':30};
+                const url = `/shipDemolition/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.shipDemolitionList.push.apply(this.shipDemolitionList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按条件搜索拆船列表
+            searchShipDemolition(){
+                if( this.shipDemolitionKey=='' && this.shipDemolitionType=='' && this.shipDemolitionDate=='' ){ return false; }
+                const url = `/shipDemolition/name`;
+                para = { key:this.shipDemolitionKey, ship_type:this.shipDemolitionType, ship_date:this.shipDemolitionDate }
+                this.sleep(1000).then(()=>{
+                    axios.post(url, para).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.shipDemolitionList = result.result
+                                this.demolitionTotalPage = 1
+                            }
+                            if(result.status == 'err'){this.shipDemolitionList = []}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //显示拆船详情
+            showShipDemolitionDetails(scope){
+                console.log('显示拆船详情');
+                this.resultCompanyName = this.defaultCompanyName;
+                this.shipDemolitionDisabled = true;
+                const id = scope.id;
+                const url = `/shipDemolition/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){this.shipDemolition = result.result;}
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+            //新增拆船视图
+            addShipDemolitionView(){
+                this.shipDemolitionDisabled = false;
+                this.shipDemolition = {};
+            },
+            //新增拆船数据
+            addShipDemolitionBtn(){
+                if(Object.keys(this.shipDemolition).length == 0){
+                    this.$message({ type: 'info', message: '信息不能为空!' });
+                    return false;
+                }
+                const url = `/shipDemolition/add`;
+                axios.post(url,this.shipDemolition).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.defaultCompanyName;
+                            this.$message({ type: 'success', message: result.info });
+                            if(result.op == 'add'){this.shipDemolition = {};};
+                            if(result.op == 'edit'){this.shipDemolitionDisabled = true;};
+                            this.getShipDemolitionList();
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //删除拆船数据
+            deleteShipDemolition(){
+                if(Object.keys(this.shipDemolition).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const id = this.shipDemolition.id;
+                this.$confirm('此操作将删除拆船数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/shipDemolition/delete`;
+                    axios.post(url,{'id':id}).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.$message({ type: 'success', message: result.info });
+                                this.shipDemolition = {};
+                                this.shipDemolitionDisabled = true;
+                                this.getShipDemolitionList();
+                            }
+                            if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                }).catch(() => {
+                    this.$message({ type: 'info', message: '取消删除!' });
+                });
+            },
+            //修改拆船视图
+            editShipDemolitionView(){
+                if(Object.keys(this.shipDemolition).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                }
+                const id = this.shipDemolition.id;
+                const url = `/shipDemolition/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.companyNameList;
+                            this.shipDemolition = result.result;
+                            this.shipDemolitionDisabled = false;
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+
+            //期租模块
+            //获取所有期租列表
+            getTimeCharterList(){
+                const url = `/timeCharter/list`;
+                this.sleep(1000).then(()=>{
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.timeCharterList = result.time_charters
+                            this.charterCurrentPage = 1
+                            this.charterTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //分页获取期租列表
+            timeCharterPage() {
+                if(this.charterCurrentPage < this.charterTotalPage){//当前页数小于总页数就请求
+                    this.charterCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.charterCurrentPage,'page_size':30};
+                const url = `/timeCharter/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.timeCharterList.push.apply(this.timeCharterList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按条件搜索期租列表
+            searchTimeCharter(){
+                if( this.timeCharterKey=='' && this.timeCharterType=='' && this.timeCharterDate=='' ){ return false; }
+                const url = `/timeCharter/name`;
+                para = { key:this.timeCharterKey, ship_type:this.timeCharterType, ship_date:this.timeCharterDate }
+                this.sleep(1000).then(()=>{
+                    axios.post(url, para).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.timeCharterList = result.result
+                                this.charterTotalPage = 1
+                            }
+                            if(result.status == 'err'){this.timeCharterList = []}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //显示期租详情
+            showTimeCharterDetails(scope){
+                console.log('显示期租详情');
+                this.resultCompanyName = this.defaultCompanyName;
+                this.timeCharterDisabled = true;
+                const id = scope.id;
+                const url = `/timeCharter/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){this.timeCharter = result.result;}
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+            //新增期租视图
+            addTimeCharterView(){
+                this.timeCharterDisabled = false;
+                this.timeCharter = {};
+            },
+            //新增期租数据
+            addTimeCharterBtn(){
+                if(Object.keys(this.timeCharter).length == 0){
+                    this.$message({ type: 'info', message: '信息不能为空!' });
+                    return false;
+                }
+                const url = `/timeCharter/add`;
+                axios.post(url,this.timeCharter).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.defaultCompanyName;
+                            this.$message({ type: 'success', message: result.info });
+                            if(result.op == 'add'){this.timeCharter = {};};
+                            if(result.op == 'edit'){this.timeCharterDisabled = true;};
+                            this.getTimeCharterList();
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //删除期租数据
+            deleteTimeCharter(){
+                if(Object.keys(this.timeCharter).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const id = this.timeCharter.id;
+                this.$confirm('此操作将删除期租数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/timeCharter/delete`;
+                    axios.post(url,{'id':id}).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.$message({ type: 'success', message: result.info });
+                                this.timeCharter = {};
+                                this.timeCharterDisabled = true;
+                                this.getTimeCharterList();
+                            }
+                            if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                }).catch(() => {
+                    this.$message({ type: 'info', message: '取消删除!' });
+                });
+            },
+            //修改期租视图
+            editTimeCharterView(){
+                if(Object.keys(this.timeCharter).length == 0){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                }
+                const id = this.timeCharter.id;
+                const url = `/timeCharter/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.companyNameList;
+                            this.timeCharter = result.result;
+                            this.timeCharterDisabled = false;
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+
+
+            //查看原文
+            watchNewsDetails() {
+                if(this.news_id == 0) { this.$message({ type: 'info', message: '请选择查阅目标！' }); return false; };
+                const id = this.news_id;
+                this.newsContent = '';
+                const url = `/news/details/${id}/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.newsContent = result.content
+                        this.news.id = result.id
+                        this.news.title = result.title
+                        this.news.profile = result.profile
+                        this.news.date = result.date
+                        this.news.keyword = eval(result.keyword)
+                        axios.get(`/category/${result.category}`).then(Response => { this.news.category = Response.data.name});
+                        axios.get(`/company/details/${result.company_id}/`).then( Response => { this.news.company_id = Response.data.name });
+                        this.news.effect = result.effect==1?'积极':'消极'
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                this.newsInner = true;
+            },
+            beforeClose(done) {
+                this.$confirm('还有未保存的工作哦确定关闭吗？','提示',{
+                    confirmButtonText: '关闭',
+                    cancelButtonText: '继续',
+                    type: 'warning',
+                    center: true
+                }).then( () => {
+                    done();
+                    console.log('关闭');
+                }).catch( () => {
+                    console.log('继续');
+                });
+            },
+            timedNewsView() {
+                window.open(`/news/timed/view/`)
+            },
+            //新闻管理
+            newsManage() {
+                this.newsView = true;
+                this.manageNewsList = [];
+                this.newsCurrentPage = 1;
+                this.sleep(500).then(()=>{
+                    const url = `/news/get/all/`;
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.manageNewsList = result.news_list_all
+                            this.newsTotalPage = result.total_page
+                        }).catch(error => {
+                            console.log('error');
+                        });
+                });
+            },
+            //分页获取新闻列表
+            newsPage() {
+                if(this.newsCurrentPage < this.newsTotalPage){//当前页数小于总页数就请求
+                    this.newsCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.newsCurrentPage,'page_size':30};
+                const url = `/news/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.manageNewsList.push.apply(this.manageNewsList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //新闻搜索
+            searchNewsByTitle() {
+                if( this.searchNewsKey=='' && this.newsCategoryId=='' && this.newsDate=='' ){ return false; }
+                this.manageNewsList = [];
+                this.newsTotalPage = 1;
+                const url = `/get_news_by_title`;
+                para = { key:this.searchNewsKey, news_category_id:this.newsCategoryId, news_date:this.newsDate }
+                axios.post(url, para).then(
+                    Response => {
+                        const result = Response.data
+                        this.manageNewsList = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            editNews() {
+                if(this.news_id == 0) { this.$message({ type: 'info', message: '请选择修改目标！' }); return false; }
+                const id = this.news_id;
+                window.open(`/news/edit/view/?id=${id}`)
+            },
+            //展示新闻标签
+            showNewsDetails(row) {
+                const id = row.id
+                this.news_id = row.id
+                const url = `/news/details/${id}/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.news.id = result.id
+                        this.news.title = result.title
+                        this.news.profile = result.profile
+                        this.news.date = result.date
+                        if( result.keyword != null && result.keyword != '' ){ this.news.keyword = result.keyword.split(","); }
+                        axios.get(`/category/${result.category}`).then(Response => { this.news.category = Response.data.name});
+                        axios.get(`/company/details/${result.company_id}/`).then( Response => { this.news.company_id = Response.data.name });
+                        this.news.effect = result.effect==1?'积极':'消极'
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            deleteNewsBtn() {
+                if(this.news_id == 0) { this.$message({ type: 'info', message: '请选择删除目标！' }); return false; }
+                const id = this.news_id;
+                this.$confirm('此操作将删除新闻, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/news/delete/${id}`;
+                    axios.get(url).then(
+                        Response => {
+                            const res = Response
+                            if(res.data.status == 'ok'){
+                                this.$message({ type: 'success', message: res.data.info });
+                                this.newsManage();
+                            }if(res.data.status == 'none'){
+                                this.$message({ type: 'info', message: res.data.info });
+                            }if(res.data.status == 'error'){
+                                this.$message({ type: 'error', message: res.data.info });
+                            }
+                        }).catch(error => {
+                            this.$message({ type: 'info', message: '出现未知错误,请刷新重试!' });
+                        });
+                });
+            },
+            //展示企业详情
+            async showCompanyDetails(row) {
+                const id = row.id;
+                this.company_id = id;
+                this.company = {};
+                this.companyDisabled = true;
+                const url = `/company/details/${id}/`;
+                await axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.company = result
+                        this.getContactsByCompanyId();
+                        if( result.keyword != null && result.keyword != '' ){ this.company.keyword = result.keyword.split(","); }
+                        if( result.category_id != null && result.category_id != '' ){
+                            this.company.category_id = result.category_id.split(",").map(function(data){ return +data; });
+                        }
+                    }).catch(error => {
+                        console.log('error');
+                        console.log(error);
+                    });
+            },
+            //修改企业信息按钮
+            editCompanyBtn() {
+                if(!this.company.id){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const row = { id: this.company.id };
+                //this.showCompanyDetails(row);
+                this.companyDisabled = false;
+            },
+            //删除企业信息按钮并删除
+            deleteCompanyBtn() {
+                if(!this.company.id){
+                    this.$message({ type: 'info', message: '请选择删除目标!' });
+                    return false;
+                };
+                const id = this.company.id;
+                const name = this.company.name;
+                this.$confirm(`此操作将删除企业: ${name} , 是否继续?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    const url = `/company/delete/${id}`;
+                    axios.get(url).then( (res) => {
+                        this.addOperations('删除企业',name);
+                        this.getAllCompanies();
+                        this.company = {};
+                        this.company_id = [];
+                        this.companyContactsList = [];
+                        this.$message({ type: 'error', message: '删除成功!' });
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除!'
+                    });
+                });
+            },
+            //获取企业列表
+            getAllCompanies(){
+                this.allCompanies = [];
+                this.companyCurrentPage = 1;
+                const url = `/get_all_companies/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.allCompanies = result.companies
+                        this.companyTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //成员标签点击事件
+            memberTagClick(item){
+                console.log('点击: '+item.name);
+                console.log('点击: '+item.id);
+                this.contacts = {};
+                this.sleep(500).then(()=>{
+                    this.showContactsDetails(item);
+                });
+                this.companyContactsBtn = false;
+                this.contactsDialog = true;
+            },
+            //新增成员标签
+            addContactsTag(){
+                this.contacts = {};
+                console.log('新增成员标签');
+                this.companyContactsBtn = true;
+                this.contactsDialog = true;
+            },
+            //分页获取企业列表
+            companyPage() {
+                if(this.companyCurrentPage < this.companyTotalPage){//当前页数小于总页数就请求
+                    this.companyCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.companyCurrentPage,'page_size':30};
+                const url = `/company/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.allCompanies.push.apply(this.allCompanies,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //获取所有企业名称及id
+            getAllCompanyName(){
+                this.allCompanies = [];
+                const url = `/all_companies_name/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.companyNameList = result.map(item => {
+                            return { company_id:item.id, name:`${item.name}` };
+                        });
+                        this.defaultCompanyName = this.companyNameList
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按名称查找企业
+            searchCompaniesByName(){
+                if( this.searchCompanyKey=='' && this.companyCategoryId=='' && this.companyAddTime=='' ){ return false; }
+                this.allCompanies = [];
+                this.companyTotalPage = 1;
+                const url = `/get_companies_by_name`;
+                para = { key:this.searchCompanyKey, company_category_id:this.companyCategoryId, company_add_time:this.companyAddTime }
+                axios.post(url, para).then(
+                    Response => {
+                        const result = Response.data
+                        this.allCompanies = result
+                        console.log('企业数组长度: '+this.allCompanies.length);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            companyManage() {
+                this.company = {};
+                this.companyContactsList = [];
+                this.sleep(500).then(()=>{
+                    console.log('所有企业');
+                    this.getAllCompanies();
+                });
+                this.companyView = true;
+            },
+            updateCompanyNewsBtn() {
+                if(!this.company.id){
+                    this.$message({ type: 'info', message: '请选择目标企业!' });
+                    return false;
+                };
+                const id = this.company.id;
+                window.open(`/company_news_update/view/${id}/`)
+            },
+            //新增企业视图
+            addCompanyView() {
+                this.company = {};
+                this.company_id = 0;
+                this.companyContactsList = [];
+                this.companyDisabled = false;
+            },
+            //新增/修改企业
+            addCompany() {
+                if(this.company.name == '' || this.company.name == null) {
+                    this.$message({ type: 'info', message: '企业名称不能为空！' });
+                    return false;
+                }
+                console.log(this.company);
+                const url = `/company/add/`;
+                axios.post(url,this.company).then( (res) => {
+                    if(res.data.status == 'err'){
+                        this.$message({ type: 'info', message: res.data.info });
+                    }
+                    if(res.data.status == 'ok') {
+                        this.$message({ type: 'success', message: res.data.info });
+                        if(res.data.op == 'add'){
+                            this.company = {};
+                            this.contactsBingCompany(res.data.company.id);
+                            this.addOperations('新增企业',res.data.company.name);
+                        };
+                        if(res.data.op == 'edit'){
+                            this.companyDisabled = true;
+                            this.addOperations('编辑企业',this.company.name);
+                        };
+                        this.getAllCompanies();
+                    }
+                }).catch( error =>  {
+                    console.log('error');
+                    this.$message({ type: 'info', message: '企业信息出错!' });
+                });
+            },
+
+
+            //通讯录模块
+            //通讯录管理模块视图
+            contactsManage() {
+                this.contacts = {};
+                this.sleep(500).then(()=>{
+                    console.log('所有联系人');
+                    this.getContactsList();
+                });
+                this.contactsView = true;
+            },
+            //获取所有通讯录列表
+            getContactsList(){
+                const url = `/contacts/list`;
+                this.sleep(1000).then(()=>{
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.contactsList = result.contacts_list
+                            this.contactsCurrentPage = 1
+                            this.contactsTotalPage = result.total_page
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //根据企业id查找通讯录
+            getContactsByCompanyId(){
+                this.companyContactsList = [];
+                if( this.company_id == 0){ return false; }
+                this.sleep(500).then(()=>{
+                    const url = `/contacts/company_id`;
+                        axios.post(url,{company_id:this.company_id}).then(
+                            Response => {
+                                const result = Response.data
+                                this.companyContactsList = result.result
+                        }).catch(error => {
+                            console.log('error');
+                        });
+                });
+            },
+            //分页获取通讯录列表
+            contactsPage() {
+                if(this.contactsCurrentPage < this.contactsTotalPage){//当前页数小于总页数就请求
+                    this.contactsCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.contactsCurrentPage,'page_size':30};
+                const url = `/contacts/list/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.contactsList.push.apply(this.contactsList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //按条件搜索通讯录列表
+            searchContacts(){
+                console.log(this.contactsKey);
+                console.log(this.contactsCompanyId);
+                console.log(this.contactsDate);
+                if( this.contactsKey=='' && this.contactsCompanyId=='' && this.contactsDate=='' ){ return false; }
+                const url = `/contacts/name`;
+                para = { key:this.contactsKey, current_company:this.contactsCompanyId, contacts_date:this.contactsDate }
+                this.sleep(1000).then(()=>{
+                    axios.post(url, para).then(
+                        Response => {
+                            const result = Response.data
+                            if(result.status == 'ok'){
+                                this.contactsList = result.result
+                                this.contactsTotalPage = 1
+                            }
+                            if(result.status == 'err'){this.contactsList = []}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                });
+            },
+            //显示通讯录详情
+            showContactsDetails(scope){
+                console.log('显示联系人详情');
+                this.contactsDisabled = true;
+                this.resultCompanyName = this.defaultCompanyName;
+                const id = scope.id;
+                const url = `/contacts/single`;
+                axios.post(url,{'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.contacts = result.result;
+                            if( result.result.current_company != null && result.result.current_company != '' ){
+                                this.contacts.current_company = +result.result.current_company;
+                            }
+                            if( result.result.history_company != null && result.result.history_company != '' ){
+                                this.contacts.history_company = result.result.history_company.split(",").map(function(data){ return +data; });;
+                            }
+                        }
+                        console.log(this.contacts);
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.result });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+            //新增通讯录表单视图
+            addContactsView(){
+                this.contacts = {};
+                this.contactsDisabled = false;
+            },
+            //新增通讯录当前任职企业
+            addCurrentCompanyView(){
+                this.company = {};
+                console.log('新增联系人当前任职企业');
+                this.companyDialog = true;
+            },
+            //新增通讯录企业
+            addContactsCompany(){
+                console.log('新增通讯录企业');
+                if(this.company.name == '' || this.company.name == null) {
+                    this.$message({ type: 'info', message: '企业名称不能为空！' });
+                    return false;
+                }
+                console.log(this.company);
+                const url = `/company/add/`;
+                axios.post(url,this.company).then( (res) => {
+                    if(res.data.status == 'err'){
+                        this.$message({ type: 'info', message: res.data.info });
+                    }
+                    if(res.data.status == 'ok') {
+                        this.$message({ type: 'success', message: res.data.info });
+                        if(res.data.op == 'add'){
+                            this.company = {};
+                            this.getAllCompanyName();
+                            this.resultCompanyName = [{ company_id:res.data.company.id, name:res.data.company.name }];
+                            this.contacts.current_company = res.data.company.id;
+                            this.companyDialog = false;
+                            this.addOperations('新增企业',res.data.company.name);
+                        };
+                        this.getAllCompanies();
+                    }
+                }).catch( error =>  {
+                    console.log('error');
+                    this.$message({ type: 'info', message: '企业信息出错!' });
+                });
+            },
+            //新增企业通讯录
+            addContactsBtn(type) {
+                if(type == 2){
+                    console.log(this.contacts.history_company);
+                    //return false;
+                }
+                console.log('type: '+type)
+                console.log(this.contacts.history_company)
+                if(this.contacts.name == '' || this.contacts.name == null) {
+                    this.$message({ type: 'info', message: '姓名不能为空！' });
+                    return false;
+                }
+                const url = `/contacts/add`;
+                axios.post(url,this.contacts).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.resultCompanyName = this.defaultCompanyName;
+                            this.$message({ type: 'success', message: result.info });
+                            if(result.op == 'add'){
+                                //this.contacts = {};
+                                if(type == 1){
+                                    this.companyContactsList.push(result.data);
+                                }
+                            };
+                            if(result.op == 'edit'){
+                                this.contactsDisabled = true;
+                                this.addOperations('编辑通讯录',this.contacts.name);
+                            };
+                            this.getContactsList();
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //通讯录数据绑定企业
+            contactsBingCompany(company_id){
+                if( this.companyContactsList.length == 0 || company_id == 0 || company_id == null) { return false; }
+                const url = `/contacts/bing/company`;
+                axios.post(url, {contacts_list:this.companyContactsList, company_id:company_id}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.companyContactsList = [];
+                            this.$message({ type: 'success', message: result.info });
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //删除通讯录数据
+            deleteContacts(type){
+                if( this.contacts.id == 0 || this.contacts.id == null || this.contacts.id == 0 ){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                };
+                const contacts_id = this.contacts.id;
+                const url = `/contacts/delete`;
+                axios.post(url,{'contacts_id':contacts_id,'company_id':this.company_id,'type':type}).then(
+                    Response => {
+                        const result = Response.data
+                        if(result.status == 'ok'){
+                            this.$message({ type: 'success', message: result.info });
+                            this.contacts = {};
+                            this.contactsDialog = false;
+                            if(type == 1){ this.getContactsByCompanyId(); }
+                            if(type == 0){ this.getContactsList(); }
+                        }
+                        if(result.status == 'err'){this.$message({ type: 'info', message: result.info });}
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+
+            //修改通讯录视图
+            editContactsView(){
+                if( this.contacts.id == 0 || this.contacts.id == '' ||  this.contacts.id == null){
+                    this.$message({ type: 'info', message: '请选择修改目标!' });
+                    return false;
+                }
+                //this.contacts = {};
+                this.contactsDisabled = false;
+            },
+
+            //获取所有分类
+            getCategories() {
+                const url = `/categories/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.categories = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //获取船舶类型
+            getShipType() {
+                const url = `/ship/type/list`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.shipTypeList = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            addOperations(action,content,annotation) {
+                const operation =  { action: action, content: content, annotation: annotation };
+                const url = `/operations/add/`;
+                axios.post(url,operation).then( (res) => {
+                }).catch(function (error) {
+                });
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.company.logo = res.img;
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return (isPNG || isJPG) && isLt2M;
+            }
+        },
+        mounted() {
+            this.getCategories();
+            this.getShipType();
+            this.getAllCompanyName();
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+</body>
+</html>

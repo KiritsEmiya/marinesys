@@ -1,0 +1,208 @@
+
+
+
+
+2020-05-14 16:13:54 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:14:42 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:15:14 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:16:53 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:18:09 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:18:12 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:19:17 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:19:19 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:20:16 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:20:20 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:20:51 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:22:49 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-14 16:35:49 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.

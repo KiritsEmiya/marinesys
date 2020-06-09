@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="zh-cn" style="height:100%;">
+<head>
+    <meta charset="utf-8">
+    <title>企业新闻更新</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename = 'base/images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static',filename = 'base/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/bootstrap.min.js') }}"></script>
+    <link href="{{ url_for('static',filename = 'summernote/summernote.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static',filename = 'summernote/summernote.js') }}" ></script>
+    <script src="{{ url_for('static',filename = 'base/js/vue.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/axios.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/element-ui.js') }}"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/element-ui.css') }}">
+    <link rel="{{ url_for('static',filename = 'thumbanil/font-awesome.min.css') }}">
+    <link rel="stylesheet prefetch" href="{{ url_for('static',filename = 'thumbanil/prism-twilight.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'thumbanil/style.css') }}">
+    <style>
+    [v-cloak] {
+            display: none;
+    }
+    body {
+        background: #fff;
+    }
+    .input-with-select .el-input-group__append {
+        background-color: #fff;
+    }
+    .el-popconfirm__action {
+        text-align: center;
+        margin: 0;
+    }
+    .el-tabs__content {
+        height:calc(100% - 39px);
+        padding:0;
+    }
+    .panel {
+        margin-bottom:0px;
+    }
+    .note-frame {
+        margin-bottom:0px;
+    }
+    .panel-default {
+        margin-bottom:0px;
+    }
+    .note-editor.note-frame.fullscreen  {
+        width:50%!important;
+    }
+    .note-editor.note-frame  {
+        height:calc(100% - 41px)!important;
+        border: 0px;
+    }
+    .note-editing-area  {
+        height:calc(100% - 10px)!important;
+    }
+    .note-codable  {
+        height:100%!important;
+    }
+    .note-editable  {
+        height:100%!important;
+    }
+    .note-status-output {
+        padding:0px!important;
+    }
+    .effects {
+        height: 130px;
+        background:#FFF;
+        border: 1px solid #DCDFE6;
+        border-radius: 4px;
+    }
+    .effects__item {
+        width: 100px !important;
+    }
+    .companyImageDiv {
+         height:calc(95% - 100px);
+         display:flex;
+         flex-direction:row;
+         align-content:flex-start;
+         justify-content:center;
+         flex-wrap:wrap;
+         overflow-y:auto;
+    }
+    .companyImageA {
+        width:100px;
+        height:100px;
+        margin:10px;
+        background:url('{{ url_for('static',filename = 'base/images/selected.png') }}');
+        background-size:100px 100px;
+        color:#000;
+        opacity: 1;
+    }
+    </style>
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            width: 384px;
+            height: 216px;
+          }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 384px;
+            height: 216px;
+            line-height: 216px;
+            text-align: center;
+        }
+        .avatar {
+            width: 384px;
+            height: 216px;
+            display: block;
+        }
+        .avatar-uploader {
+            height: 216px;
+        }
+    </style>
+</head>
+<body style="height:100%;">
+<!-- 代码 开始 -->
+<div  id="app" v-cloak style="width:100%;height:100%;">
+    <el-drawer title="新闻详情" :visible.sync="similarView" direction="rtl" :with-header="false" size="50%">
+        <div style="height:100%;width:100%;padding:20px;padding-bottom:20px;" v-html="relatedNewsDetail.content">
+        </div>
+    </el-drawer>
+    <div style="width:50%;height:100%;float:left;">
+        <div id="summernote" style="text-align:center;"></div>
+    </div>
+    <div style="width:50%;height:100%;float:left;position:fixed;right:0;bottom:0;">
+        <el-tabs type="border-card" style="width:100%;height:100%;"  @tab-click="onTabClick" v-model="tabView">
+            <el-tab-pane label="标签管理" style="width:100%;height:100%;" name="tabManage">
+                <div style="width:100%;height:100%;overflow-x:hidden;overflow-y:auto;">
+                    <el-form style="width:95%;margin:20px auto;" :rules="rules" ref="news" size="medium" :model="news">
+                        <el-form-item label="新闻标题" prop="title" :label-width="formLabelWidth">
+                            <el-input v-model="news.title" placeholder="请输入新闻标题" ></el-input>
+                        </el-form-item>
+                        <el-form-item label="新闻简介" prop="profile" :label-width="formLabelWidth">
+                            <el-input v-model="news.profile" placeholder="请输入新闻简介" :autosize="{ minRows: 2, maxRows: 6}" type="textarea"></el-input>
+                        </el-form-item>
+                        <el-form-item label="新闻日期" prop="date" :label-width="formLabelWidth">
+                            <div class="block">
+                                <el-date-picker style="width:322px" value-format="yyyy-MM-dd" v-model="news.date" type="date" placeholder="选择日期"></el-date-picker>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="新闻影响" prop="effect" :label-width="formLabelWidth">
+                            <el-select v-model="news.effect" style="width:322px" placeholder="请选择新闻影响">
+                                <el-option label="积极" value="1"></el-option>
+                                <el-option label="消极" value="0"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="新闻类别" prop="category" :label-width="formLabelWidth">
+                            <el-select v-model="news.category" style="width:322px" placeholder="请选择新闻类别">
+                                <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="相关企业" prop="company" :label-width="formLabelWidth">
+                            <el-input v-model="companyName" placeholder='注意: 多个企业之间请以 "&" 号相连！ 例如: 中远&海顺&东方海外' autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="关键词组" prop="keyword" :label-width="formLabelWidth">
+
+<!--                            <el-input v-model="news.keyword" :placeholder="keywordInfo" :autosize="{ minRows: 3, maxRows: 6}" type="textarea"></el-input>-->
+
+                            <el-select v-model="news.keyword" popper-append-to-body no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="请输入企业关键词">
+                                <el-option-group popper-append-to-body v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                                    <el-option popper-append-to-body v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                                </el-option-group>
+                            </el-select>
+
+                        </el-form-item>
+                        <el-form-item label="缩略图组"  :label-width="formLabelWidth">
+                            <div class="effects">
+                                <template>
+                                    <el-popconfirm title="是否删除此图片？" @onconfirm="deleteThumbnail(src, index)" placement="top" v-for="(src, index) in newsThumbnailList" v-bind:key="src">
+                                            <a style="width:110px;height:110px;" href="javascript:void(0);" slot="reference">
+                                                <img style="width:100px;height:100px;margin:0 10px;" :src="src" fit="contain"/>
+                                            </a>
+                                    </el-popconfirm>
+                                </template>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div style="text-align:center;">
+                                <el-button type="success" @click="addNewsBtn">提 交</el-button>
+                            </div>
+                        </el-form-item>
+                </el-form>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="实时新闻" style="width:100%;height:100%;">
+                <template style="text-align:center;">
+                    <el-table :data="hourlyNewsList" border style="text-align:center;width:100%;" highlight-current-row height="100%" @row-click="hourlyNewsRow">
+                        <el-table-column fixed prop="date" label="日期" width="95"></el-table-column>
+                        <el-table-column prop="title" label="标题">
+                            <template slot="header" slot-scope="scope">
+                                <el-input placeholder="请输入企业新闻搜索关键词" @keyup.enter.native="searchCompanyNews(searchKey)" v-model="searchKey" class="input-with-select" suffix-icon="el-icon-search">
+                                    <el-select v-model="source" slot="append" style="width:85px;">
+                                        <el-option label="百度" value="baidu"></el-option>
+                                        <el-option label="谷歌" value="google"></el-option>
+                                    </el-select>
+                                    <template slot="prepend">新闻标题</template>
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="keyword" label="关键词" width="80">
+                        </el-table-column>
+                        <el-table-column prop="source" label="来源" width="50">
+                            <template slot-scope="scope">
+                                <div v-if="scope.row.source == 1">百度</div>
+                                <div v-else>谷歌</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="status" label="状态" width="57">
+                            <template slot-scope="scope">
+                                <a v-if="scope.row.status == 1" class="btn btn-success btn-xs" style="font-size:10px;">已读</a>
+                                <a v-else class="btn btn-danger btn-xs" style="font-size:10px;">未读</a>
+                            </template>
+                        </el-table-column>
+                        <el-table-column width="100" label="操作">
+                            <template slot-scope="scope" style="display:inline-block;">
+                            <el-tooltip class="item" effect="light" content="编辑新闻" placement="left">
+                                <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="editNews(scope)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="阅读原文" placement="top">
+                                <el-button type="success" icon="el-icon-view" circle size="mini" @click="watchOriginalNews(scope)"></el-button>
+                            </el-tooltip>
+<!--                                <el-button type="primary" icon="el-icon-view" size="mini" @click="watchOriginalNews(scope)">原文</el-button>-->
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane label="关联新闻" style="width:100%;height:100%;" name="relatedNews">
+                <template style="text-align:center;">
+                    <el-table :data="relatedNewsList" border style="text-align:center;width:100%;" highlight-current-row height="100%">
+                        <el-table-column fixed prop="date" label="日期" width="95"></el-table-column>
+                        <el-table-column prop="title" label="标题"></el-table-column>
+                        <el-table-column width="100" label="操作">
+                            <template slot-scope="scope" style="display:inline-block;">
+                                <el-button type="success" icon="el-icon-view" size="mini" @click="watchNewsDetails(scope)">查看</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane label="相似新闻" style="width:100%;height:100%;" name="similarNews">
+                <template style="text-align:center;">
+                    <el-table :data="similarNewsList" border style="text-align:center;width:100%;" highlight-current-row height="100%">
+                        <el-table-column fixed prop="date" label="日期" width="95"></el-table-column>
+                        <el-table-column prop="title" label="标题"></el-table-column>
+                        <el-table-column width="65" prop="similar" label="相似度">
+                        </el-table-column>
+                        <el-table-column width="100" label="操作">
+                            <template slot-scope="scope" style="display:inline-block;">
+                                <el-button type="success" icon="el-icon-view" size="mini" @click="watchNewsDetails(scope)">查看</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane label="目标网站" style="width:100%;height:100%;" name="targetWebSite">
+                <iframe style="width:100%;float:left;height:100%;" :src="targetNewsUrl"></iframe>
+            </el-tab-pane>
+            <el-tab-pane label="图片管理" style="width:100%;height:100%;" name="imageManage">
+                <div  style="text-align:center;width:100%;height:5%;margin:50px auto;">
+                    <el-input style="margin-right:20px;width:45%;" placeholder="请输入企业图片搜索关键词" @keyup.enter.native="imagesByKeyword(searchImageKey)" v-model="searchImageKey" class="input-with-select" suffix-icon="el-icon-search">
+                        <el-button slot="append" @click="imagesByKeyword(searchImageKey)">搜索</el-button>
+                    </el-input>
+                    <el-button type="primary" size="medium" @click="uploadCompanyImage">上传</el-button>
+                    <el-button type="success" size="medium"  @click="editCompanyImage">修改</el-button>
+                    <el-button type="info" size="medium"  @click="mergeCompanyImage">合并</el-button>
+                    <el-button type="danger" size="medium"  @click="deleteCompanyImage">删除</el-button>
+                </div>
+                <div class="companyImageDiv">
+                    <div v-show="imageInfo" style="margin-top:70px;height:100px;width:100%;text-align:center;"><span class="el-table__empty-text">暂无相关图片</span></div>
+                    <a class="companyImageA" v-for="(item, index) in companyImageList" href="javascript:void(0);">
+                        <img ref="imgList" @click="selectCompanyImage(item, index)" style="width:100px;height:100px;opacity:1" :src="item.url" fit="contain"/>
+                    </a>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+    <el-dialog title="上传企业图片" center :visible.sync="uploadImageView" @open="validate_disappear">
+        <el-form :rules="imageRules" ref="image" :model="image">
+            <el-form-item label="所属企业" :label-width="formLabelWidth">
+                <el-input autocomplete="off" v-model="companyName" readonly></el-input>
+            </el-form-item>
+            <el-form-item label="图片分类" prop="category_id" :label-width="formLabelWidth">
+                <el-select style="width:384px" v-model="image.category_id" placeholder="请选择图片分类">
+                    <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="效果预览" prop="url" :label-width="formLabelWidth">
+                <el-input autocomplete="off" v-model="image.url" readonly style="display:none;"></el-input>
+                <el-upload class="avatar-uploader" action="/upload/company/image/"
+                    :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img v-if="image.url" :src="image.url" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="关键词组" prop="keyword" :label-width="formLabelWidth">
+<!--                <el-input autocomplete="off" v-model="image.keyword"></el-input>-->
+
+                <el-select v-model="image.keyword" popper-append-to-body no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="请输入企业关键词">
+                    <el-option-group popper-append-to-body v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                        <el-option popper-append-to-body v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                    </el-option-group>
+                </el-select>
+
+            </el-form-item>
+        </el-form>
+        <div slot="footer" style="align-text:center;" class="dialog-footer">
+            <el-button type="primary" @click="uploadImageBtn">上 传</el-button>
+            <el-button type="danger" @click="uploadImageView = false">取 消</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="修改企业图片" center :visible.sync="editImageView" @closed="validate_disappear">
+        <el-form :rules="imageRules" ref="image" :model="image">
+            <el-form-item label="所属企业" :label-width="formLabelWidth">
+                <el-input autocomplete="off" v-model="companyName" readonly></el-input>
+            </el-form-item>
+            <el-form-item label="图片分类" prop="category_id" :label-width="formLabelWidth">
+                <el-select style="width:384px" v-model="image.category_id" placeholder="请选择图片分类">
+                    <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="效果预览" prop="url" :label-width="formLabelWidth">
+                <el-input autocomplete="off" v-model="image.url" readonly style="display:none;"></el-input>
+                <el-upload class="avatar-uploader" action="/upload/company/image/"
+                    :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img v-if="image.url" :src="image.url" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="关键词组" prop="keyword" :label-width="formLabelWidth">
+<!--                <el-input autocomplete="off" v-model="image.keyword"></el-input>-->
+
+                <el-select v-model="image.keyword" popper-append-to-body no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="请输入企业关键词">
+                    <el-option-group popper-append-to-body v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                        <el-option popper-append-to-body v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                    </el-option-group>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" style="align-text:center;" class="dialog-footer">
+            <el-button type="success" @click="editImageBtn">修 改</el-button>
+            <el-button type="danger" @click="editImageView = false">取 消</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        //height: 830,
+        lang:'zh-CN',
+        toolbar: [
+            ['style', ['style']],
+            //['font', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['bold', 'italic', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['paragraph']],
+            ['height', ['height']],
+            //['table', ['table']],
+            //['insert', ['link', 'picture', 'hr']],
+            ['insert', ['picture']],
+            //['view', ['fullscreen', 'codeview']],
+            ['view', ['codeview']],
+            ['help', ['help']]
+        ],
+        callbacks: {
+            onImageUpload: function(files) {
+                // upload image to server and create imgNode...
+                saveImage(files);
+            },
+            onMediaDelete: function(target) {
+                deleteImage(target.context.currentSrc);
+            }
+        }
+    });
+    function saveImage(files) {
+        let imageData = new FormData();
+        imageData.append("imageData", files[0]);
+        imageData.append("name", "Tom");
+        var type = 1;
+        $.ajax({
+            url: `/news/image/${type}/`, // 图片上传url
+            type: 'POST',
+            data: imageData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',     // 以json的形式接收返回的数据
+            // 图片上传成功
+            success: function ($result) {
+                let imgNode = document.createElement("img");
+                imgNode.src = $result.img;
+                $('#summernote').summernote('insertNode', imgNode);
+            },
+            // 图片上传失败
+            error: function () {
+                console.log('图片上传失败');
+            }
+        });
+    };
+    function deleteImage(currentSrc) {
+        $.ajax({
+            url: `/news/image/delete/?img_name=${currentSrc}`, // 图片上传url
+            type: 'GET',
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',     // 以json的形式接收返回的数据
+            // 图片上传成功
+            success: function ($result) {
+                console.log($result);
+            },
+            // 图片上传失败
+            error: function () {
+                console.log($result);
+            }
+        });
+    };
+});
+
+</script>
+<script>
+    var app = new Vue({
+        delimiters: ['{[', ']}'],
+        el: '#app',
+        data: {
+            categories: [],
+            title: '新加坡新闻',
+            similarView: false,
+            uploadImageView: false,     //上传图片视图
+            editImageView: false,       //修改图片视图
+            popoverShow: false,
+            source: 'baidu',
+            searchKey: '',
+            searchImageKey: '',
+            companyImageSrc: '',
+            tabView: 'tabManage',    //选项卡视图
+            newsThumbnailList: [],  //缩略图列表
+            suggestion_keyword: [{label: '选择或输入关键词',options: []}],
+            companyImageList: [],  //企业图片列表
+            ImgSelectedList: [],  //选中图片列表
+            imageInfo: false,        //图片无结果显示信息控制
+            imageUrl: '',  //上传图片预览地址
+            company_id: 0,
+            companyName: '',
+            company_keyword: [],
+            relatedNewsDetail: {},
+            relatedNewsList: [],    //关联新闻列表
+            similarNewsList: [],    //相似新闻列表
+            hourlyNewsList: [],     //实时新闻列表
+            currentNewsUrl: '',     //当前实时新闻链接
+            targetNewsUrl: '',     //目标实时新闻链接
+            news: {
+              title: '',
+              profile: '',
+              date: '',
+              effect: '',
+              category: '',
+              keyword: []
+            },
+            rules: {
+                title: [
+                    { required: true, message: '请输入新闻标题', trigger: 'change' }
+                ],
+                profile: [
+                    { required: true, message: '请输入新闻简介', trigger: 'change' }
+                ],
+                date: [
+                    { required: true, message: '请选择新闻日期', trigger: 'change' }
+                ],
+                effect: [
+                    { required: true, message: '请选择新闻影响', trigger: 'change' }
+                ],
+                category: [
+                     { required: true, message: '请选择新闻类别', trigger: 'change' }
+                ],
+                keyword: [
+                    { type: 'array', required: true, message: '请输入新闻关键词', trigger: ['blur', 'change'] }
+                ]
+            },
+            image: {
+              id: '',
+              url: '',
+              keyword: [],
+              company_id: '',
+              category_id: ''
+            },
+            imageRules: {
+                url: [
+                    { required: true, message: '请添加企业图片', trigger: 'change' }
+                ],
+                category_id: [
+                     { required: true, message: '请选择图片分类', trigger: 'change' }
+                ],
+                keyword: [
+                    { type: 'array', required: true, message: '请输入图片关键词', trigger: ['blur', 'change'] }
+                ]
+            },
+            formLabelWidth: '80px'
+        },
+        methods: {
+            validate_disappear() {
+                this.$nextTick(()=>{
+                    this.$refs.image.clearValidate();
+                });
+            },
+            //删除缩略图
+            deleteThumbnail(src, index) {
+                //console.log(src);
+                //console.log(index);
+                let code=$("#summernote").summernote("code");
+                let img = $('<div>'+code+'</div>').find('img');
+                for (i = 0; i < img.length; i++) {
+                    if(img[i].src == src){
+                        const div = document.createElement("div");
+                        div.appendChild(img[i]);
+                        //console.log('删除图片\n'+div.innerHTML);
+                        //console.log(img[i].src);
+                        axios.get(`/news/image/delete/?img_name=${img[i].src}`).then((res) => { console.log(res.data); });
+                        //console.log(typeof img[i].src);
+                        //axios.get(`/news/details/${id}/`);
+                        let value = code.replace(div.innerHTML,"");
+                        $('#summernote').summernote('reset');
+                        $('#summernote').summernote('code',value);
+                        this.newsThumbnailList.splice(index, 1);
+                    }
+                }
+            },
+            //获取与该关键词有关的所有图片
+            imagesByKeyword(searchImageKey) {
+                if (searchImageKey.trim() == ''){
+                    this.$message({ type: 'info', message: '请输入图片搜索关键词!' });
+                    return false;
+                }
+                this.companyImageList = [];
+                const url = `/keyword/image/list`;
+                axios.post(url,{'company_id':this.company_id,'keyword':searchImageKey.trim()}).then(
+                    Response => {
+                        const result = Response.data
+                        this.companyImageList = result
+                        if(this.companyImageList.length == 0){ this.imageInfo = true; }
+                        if(this.companyImageList.length != 0){ this.imageInfo = false; }
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //获取所有企业图片
+            getAllCompanyImage() {
+                this.companyImageList = [];
+                const url = `/company/image/list?company_id=${this.company_id}`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.companyImageList = result
+                        if(this.companyImageList.length == 0){ this.imageInfo = true; }
+                        if(this.companyImageList.length != 0){ this.imageInfo = false; }
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //选择企业图片
+            selectCompanyImage(i, index) {
+                //console.log('index: '+index + ' content: ' + this.companyImageList[index]);
+                if (this.$refs.imgList[index].style.opacity==1){
+                    this.$refs.imgList[index].style.opacity = 0.3;
+                    this.ImgSelectedList.push(this.companyImageList[index]);
+                }else {
+                    this.$refs.imgList[index].style.opacity = 1;
+                    //console.log('this.ImgSelectedList.length: ' + this.ImgSelectedList.length);
+                    if (this.ImgSelectedList.length != 0){
+                        for(let i in this.ImgSelectedList) {
+                            //console.log(i+': '+this.ImgSelectedList[i]);
+                            if (this.ImgSelectedList[i] == this.companyImageList[index]){
+                                //console.log('已删除选中图片: '+ this.ImgSelectedList[i]);
+                                this.ImgSelectedList.splice(i, 1);
+                            }
+                        };
+                    };
+                }
+            },
+            //上传企业图片视图
+            uploadCompanyImage() {
+                console.log('上传企业图片');
+                this.image.keyword = [];
+                this.image.keyword.push(this.companyName);
+                //console.log(this.image.keyword);
+                this.image.company_id = this.company_id;
+                this.image.category_id = null;
+                this.image.url = '';
+                this.uploadImageView = true;
+            },
+            //上传企业图片验证
+            uploadImageBtn() {
+            //console.log(this.image.keyword)
+                this.$refs.image.validate((valid) => {
+                    if (valid) {
+                        this.addCompany();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            //上传企业图片
+            addCompany() {
+                //console.log('上传企业图片');
+                const image = {
+                    id: '',
+                    url: this.image.url,
+                    keyword: this.image.keyword,
+                    company_id: this.image.company_id,
+                    category_id: this.image.category_id
+                };
+                const url = `/add/company/image/`;
+                axios.post(url,image).then( (res) => {
+                    if(res.data.status == 'ok'){
+                        this.$message({ type: 'success', message: '添加图片成功!' });
+                        this.getAllCompanyImage();
+                        this.uploadImageView = false;
+                    };
+                }).catch(function (error) {
+                    console.log('error');
+                });
+            },
+            //修改企业图片视图
+            editCompanyImage() {
+                console.log('修改企业图片');
+                if (this.ImgSelectedList.length == 0){
+                    this.$message({ type: 'info', message: '请选择一张图片!' });
+                    return false;
+                }if (this.ImgSelectedList.length > 1){
+                    this.$message({ type: 'info', message: '暂不支持批量修改,请选择单张图片!' });
+                    return false;
+                }if (this.ImgSelectedList.length == 1){
+                    //console.log(this.ImgSelectedList[0])
+                    this.image.id = this.ImgSelectedList[0].id;
+                    this.image.keyword = eval(this.ImgSelectedList[0].keyword.split(','));
+                    this.image.url = this.ImgSelectedList[0].url;
+                    this.image.category_id = this.ImgSelectedList[0].category_id;
+                    this.editImageView = true;
+                };
+
+            },
+            //修改企业图片验证
+            editImageBtn() {
+                this.$refs.image.validate((valid) => {
+                    if (valid) {
+                        this.editCompany();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            //修改企业图片
+            editCompany() {
+                console.log('修改企业图片');
+                const image = {
+                    id: this.image.id,
+                    url: this.image.url,
+                    keyword: this.image.keyword,
+                    company_id: this.image.company_id,
+                    category_id: this.image.category_id
+                };
+                const url = `/edit/company/image/`;
+                axios.post(url,image).then( (res) => {
+                    if(res.data.status == 'ok'){
+                        this.$message({ type: 'success', message: '添加图片成功!' });
+                        this.getAllCompanyImage();
+                        this.ImgSelectedList = [];
+                        this.editImageView = false;
+                    };
+                }).catch(function (error) {
+                    console.log('error');
+                });
+            },
+            //合并企业图片
+            mergeCompanyImage() {
+                console.log('合并企业图片');
+                if (this.ImgSelectedList.length < 2){
+                    this.$message({ type: 'info', message: '请至少选择两张相似的图片!!' });
+                    return false;
+                }
+                console.log(this.ImgSelectedList);
+                const url = `/company/image/merge/`;
+                axios.post(url,this.ImgSelectedList).then( (res) => {
+                    if(res.data.status == 'ok'){
+                        this.$message({ type: 'success', message: res.data.info });
+                        this.ImgSelectedList = [];
+                        this.getAllCompanyImage();
+                    }if(res.data.status == 'part'){
+                        this.$message({ type: 'info', message: res.data.info });
+                    }if(res.data.status == 'error'){
+                        this.$message({ type: 'error', message: res.data.info });
+                    }
+                }).catch(function (error) {
+                    console.log('error');
+                });
+            },
+            //删除企业图片
+            deleteCompanyImage() {
+                //console.log('删除企业图片');
+                //console.log(this.ImgSelectedList);
+                if ( this.ImgSelectedList.length != 0 ) {
+                    let imgSelectedIdList = [];
+                    for(let i in this.ImgSelectedList) {
+                        imgSelectedIdList.push(this.ImgSelectedList[i])
+                    };
+                    //console.log(imgSelectedIdList);
+                    const url = `/company/image/delete/`;
+                    axios.post(url,imgSelectedIdList).then( (res) => {
+                        if(res.data.status == 'ok'){
+                            this.$message({ type: 'success', message: res.data.info });
+                            this.ImgSelectedList = [];
+                            this.getAllCompanyImage();
+                        }if(res.data.status == 'part'){
+                            this.$message({ type: 'info', message: res.data.info });
+                        }if(res.data.status == 'error'){
+                            this.$message({ type: 'error', message: res.data.info });
+                        }
+                    }).catch(function (error) {
+                        console.log('error');
+                    });
+                }else {
+                    this.$message({ type: 'info', message: '请选择需要删除的图片!' });
+                    return false;
+                };
+            },
+            //标签页点击事件
+            onTabClick(tab) {
+                if ( tab.name == 'imageManage' || tab.name == 'tabManage' ) {
+                    //console.log(tab.name);
+                    this.newsThumbnailList = [];
+                    let code=$("#summernote").summernote("code");
+                    let img = $('<div>'+code+'</div>').find('img');
+                    //console.log(img.length);
+                    for (i = 0; i < img.length; i++) {
+                        this.newsThumbnailList.push(img[i].src)
+                    }
+                    return false;
+                };
+                if ( tab.name == 'targetWebSite' ) {
+                    if(this.currentNewsUrl == ''){this.$message({ type: 'info', message: '请选择新闻进行查看!' }); return false;}
+                    this.targetNewsUrl = this.currentNewsUrl;
+                };
+            },
+            //操作日志
+            addOperations(action,content,annotation) {
+                const operation =  { action: action, content: content, annotation: annotation };
+                const url = `/operations/add/`;
+                axios.post(url,operation).then( (res) => {
+                    //console.log(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            editNews(scope) {
+                const id = scope.$index;
+                this.hourlyNewsList[scope.$index].status = 1;
+                //this.newsStatusChange(id);
+                this.addOperations('编辑新闻',scope.row.title,scope.row.url);
+                //this.getOverview(id);
+                this.news.title = scope.row.title;
+                this.news.profile = scope.row.profile;
+                this.news.date = scope.row.date;
+                this.news.company = this.company_id;
+                this.news.keyword = [];
+                this.news.keyword.push(this.companyName);
+                this.targetWebsite = scope.row.url;
+                this.$nextTick(()=>{
+                    this.$refs.news.clearValidate();
+                });
+                this.tabView = 'tabManage';
+            },
+            //阅读原文
+            watchOriginalNews(scope) {
+                this.hourlyNewsList[scope.$index].status = 1;
+                window.open(scope.row.url)
+            },
+            newsStatusChange(id) {
+                const url = `/news/status/change/${id}`;
+                axios.get(url).then(
+                    Response => {
+                        console.log('新闻状态修改成功!');
+                    }).catch(error => {
+                        console.log('新闻状态修改失败!');
+                    });
+            },
+            watchNewsDetails(scope) {
+                const id = scope.row.id;
+                this.relatedNewsDetail = {};
+                const url = `/news/details/${id}/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data;
+                        this.relatedNewsDetail = result;
+                        this.similarView = true;
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //获取相似新闻列表
+            async similarNews(newsKeyword) {
+                if (this.companyName==''){return false;}
+                newsKeyword = this.companyName;
+                const url = `/news/similar/list?key=${newsKeyword}`;
+                await axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.similarNewsList = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //获取关联新闻列表
+            relatedNews() {
+                const url = `/select/news/by_company_id?company_id=${this.company_id}`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.relatedNewsList = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //新增新闻验证
+            addNewsBtn() {
+                //this.similarNews().then( () => { console.log('ok'); });
+                if ($('#summernote').summernote('isEmpty')) {
+                    this.$message({ type: 'info', message: '新闻内容不可为空，请编辑新闻内容!' });
+                    return false;
+                };
+                this.$refs.news.validate((valid) => {
+                    if (valid) {
+                        this.addNews();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            //新增新闻
+            addNews() {
+                let markupStr = $('#summernote').summernote('code');
+                const news =  {
+                    title: this.news.title,
+                    profile: this.news.profile,
+                    date: this.news.date,
+                    effect: this.news.effect,
+                    category: this.news.category,
+                    company: this.company_id,
+                    keyword: this.news.keyword,
+                    content: markupStr
+                };
+                //console.log(news);
+                const url = `/news/add/`;
+                axios.post(url,news).then( (res) => {
+                    console.log(res.data);
+                    if(res.data.status == 'repeat'){
+                        this.similarNewsList = res.data.similar_news_list;
+                        this.$message({ type: 'info', message: '新闻内容重复，请检查相似新闻哦!' });
+                    }if(res.data.status == 'error'){
+                        this.$message({ type: 'info', message: '新闻信息出错，请仔细检查哦!' });
+                    }if(res.data.status == 'no'){
+                        this.$message({ type: 'info', message: '暂无企业信息，请前往企业管理新增企业!' });
+                    }if(res.data.status == 'ok') {
+                        this.$message({ type: 'success', message: '提交企业新闻成功!' });
+                        this.news = { title: '', profile: '', date: '', effect: null, category: null, keyword: [] };
+                        this.newsThumbnailList = [];
+                        this.relatedNews();
+                        $('#summernote').summernote('reset');
+                        this.$nextTick(()=>{
+                            this.$refs.news.clearValidate();
+                        });
+                    };
+                }).catch(function (error) {
+                    //console.log(error);
+                    this.$message({ type: 'info', message: '新闻信息出错，请仔细检查哦!' });
+                });
+            },
+            //获取分类
+            getCategory() {
+                const url = `/categories/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.categories = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //实时新闻搜索
+            searchCompanyNews(value) {
+                if(value.trim() == '') { this.$message({ type: 'info', message: '请输入搜索企业新闻关键词!' });return false; };
+                const id = this.company_id;
+                let url = `/news_by_baidu/`;
+                console.log(value);
+                if(this.source=='baidu'){ this.source = 'baidu' ; console.log('baidu'); url = `/news_by_baidu/?key=${value}&id=${id}`;}
+                if(this.source=='google'){ this.source = 'google'; console.log('google'); url = `/news_by_google/?key=${value}&id=${id}`;}
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        console.log(result);
+                        this.hourlyNewsList = result
+                    }).catch(error => {
+                        this.$message({ type: 'error', message: '无法连接谷歌网络，请检查代理设置!' });
+                    });
+            },
+            //点击实时新闻行事件
+            hourlyNewsRow(row) {
+                this.currentNewsUrl = row.url;
+            },
+            //初始化实时新闻列表
+            defaultHourlyNewsList(keyword) {
+                const id = this.company_id;
+                let url = `/default_hourly_news/`;
+                console.log(keyword);
+                axios.post(url,{'keyword':keyword,'id':id}).then(
+                    Response => {
+                        const result = Response.data
+                        this.hourlyNewsList = result
+                    }).catch(error => {
+                        this.$message({ type: 'error', message: '系统错误，请刷新重试!' });
+                    });
+            },
+            //上传企业图片
+            handleAvatarSuccess(res, file) {
+                this.image.url = res.img;
+                //console.log(this.image.url)
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return (isPNG || isJPG) && isLt2M;
+            }
+        },
+        mounted() {
+            this.company_id = {{ company.id }};
+            this.companyName = '{{company.name | safe}}';
+            this.company_keyword = '{{company.keyword | safe}}'
+            this.news.keyword.push(this.companyName);
+            this.searchKey = this.companyName;
+            this.defaultHourlyNewsList(this.company_keyword);
+            this.getCategory();
+            this.getAllCompanyImage();
+            this.relatedNews();
+        }
+    });
+</script>
+<!-- 代码 结束 -->
+</body>
+</html>

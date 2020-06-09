@@ -1,0 +1,309 @@
+{% extends "home/layout.html" %}
+{% block css %}
+    <style>
+        #shadow-color{
+            background-image:linear-gradient(to right , #003333,#7A88FF );
+        }
+        #search {
+            width: 440px;
+            height: 40px;
+            border:none;    /*取消默认的边框以设置自定义边框*/
+            outline:none;   /*取消浏览器默认的蓝光边框以设置自定义的输入框*/
+            font-size: 16px;
+            color: rgb(112, 112, 112);
+            margin-left: 10px;
+        }
+        .searchbar {        /*目的是设置自定义边框，比如圆角与阴影*/
+            border: rgb(218, 218, 218) solid 1px;
+            border-radius: 2em;
+            width: 552px;
+            height: 42px;
+            box-shadow: 0px 0px 5px rgb(212, 212, 212);
+            margin: 0 auto;
+        }
+
+        .mcp {
+            height: 35px;
+        }
+
+        .mg {
+            height: 25px;
+            margin-left: 15px;
+        }
+        #search, .mcp, .mg {
+            vertical-align: middle;
+        }
+
+
+
+        div.container-search {
+            position: relative;
+            /* 父元素可以有绝对或相对大小，也可以仅由其内容决定其大小 */
+        }
+        div.window-center {
+            margin: auto;
+            margin: 0;
+
+            position: relative;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+
+        h1 {
+          margin: 0 auto 0 auto;
+          font-family: 'Lato', sans-serif;
+          line-height: 80px;
+          font-size: 8.5rem;
+          padding: 20px 70px;
+          text-align: center;
+          text-transform: uppercase;
+          text-rendering: optimizeLegibility;
+        }
+
+        h1::before {
+          content:"";
+          width: 80%;
+          height: 100px;
+          position: absolute;
+          top: -200px;
+          left: 10px;
+          transform: rotate(55deg);
+          background: rgba(206,188,155,.7);
+          background: -moz-linear-gradient(left, rgba(206,188,155,.7) 0%, rgba(42,31,25,0) 65%);
+          background: -webkit-gradient(left top, right top, color-stop(0%, rgba(206,188,155,.7)), color-stop(65%, rgba(42,31,25,0)));
+          background: -webkit-linear-gradient(left, rgba(206,188,155,.7) 0%, rgba(42,31,25,0) 65%);
+          background: -o-linear-gradient(left, rgba(206,188,155,.7) 0%, rgba(42,31,25,0) 65%);
+          background: -ms-linear-gradient(left, rgba(206,188,155,.7) 0%, rgba(42,31,25,0) 65%);
+          background: linear-gradient(to right, rgba(206,188,155,.7) 0%, rgba(42,31,25,0) 65%);
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cebc9b', endColorstr='#2a1f19', GradientType=0.7 ); );
+        }
+
+        #text3d {
+            color: #70869d;
+            letter-spacing: .15em;
+            text-shadow:
+              -1px -1px 1px #efede3,
+              0px 1px 0 #2e2e2e,
+              0px 2px 0 #2c2c2c,
+              0px 3px 0 #2a2a2a,
+              0px 4px 0 #282828,
+              0px 5px 0 #262626,
+              0px 6px 0 #242424,
+              0px 7px 0 #222,
+              0px 8px 0 #202020,
+              0px 9px 0 #1e1e1e,
+              0px 10px 0 #1c1c1c,
+              0px 11px 0 #1a1a1a,
+              0px 12px 0 #181818,
+              0px 13px 0 #161616,
+              0px 14px 0 #141414,
+              0px 15px 0 #121212,
+              2px 20px 5px rgba(0, 0, 0, 0.9),
+              5px 23px 5px rgba(0, 0, 0, 0.3),
+              8px 27px 8px rgba(0, 0, 0, 0.5),
+              8px 28px 35px rgba(0, 0, 0, 0.9);
+         }
+         .frame_top {display:inline;}
+    </style>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/element-ui.css') }}">
+    <style>
+      .el-carousel__item {
+        color: #475669;
+        font-size: 14px;
+        opacity: 0.75;
+        line-height: 200px;
+        margin: 0;
+        background:transparent;
+        color:#23b7cb;
+        font-size:15px;
+        padding:5px 15px;
+        border:1px transparent solid;
+        border-image:linear-gradient(to right,#000718,#23b7cb) 1 10;
+      }
+
+      .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+      }
+
+      .el-carousel__item:nth-child(2n+1) {
+        background-color: #d3dce6;
+      }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <!-- 引入组件库 -->
+    <script src="{{ url_for('static',filename = 'base/js/vue.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/element-ui.js') }}"></script>
+    <script>
+        var app = new Vue({
+            delimiters: ['{[', ']}'],
+            el: '#app',
+            data: {
+                display: false
+            },
+            methods: {
+                show() {
+                    this.display = !this.display;
+                }
+            }
+        });
+        $(document).ready(function() {
+            $("img.lazy").lazyload({
+                effect: "fadeIn"
+            });
+            $("#do-search").click(function () {
+                var key=$("#search").val().trim();
+    　　         if(key != ""){
+                    location.href = "{{ url_for('home.search') }}?key="+key;
+                 }
+            });
+        });
+        $("#search").on("keydown", function(event){
+        　　var keyboard = event.which;
+            var key = $("#search").val().trim();
+        　　if(keyboard == 13 && key != ""){
+                location.href = "{{ url_for('home.search') }}?key="+key;
+        　　}
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+<div id="app">
+    <section id="hotmovie" style="margin-top:70px">
+        <div class="container-search" id="shadow-color" style="width:100%;height:450px;background:url({{ url_for('static',filename = 'base/images/shadow.jpg') }})">
+            <div class="window-center"><h1 id="text3d">Search</h1>
+                <div class="searchbar" style="background:#FFF;">
+                    <a><img id="do-search" src="{{ url_for('static',filename = 'base/images/search.png') }}" class="mg"></a>
+                    <input type="text" id="search" placeholder="请输入企业名称" name="keyword" >
+                    <img src="{{ url_for('static',filename = 'base/images/microphone.png') }}" class="mcp">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--分类列表-->
+    <section id="movielist" style="padding-top:10px;">
+
+        <div class="container" style="margin-top:30px;">
+            <div class="row wow fadeIn" data-wow-delay="0.6s">
+                <div class="col-md-12 table-responsive">
+                    <table class="table text-left table-bordered" style="border:0px;margin-bottom:10px;padding-bottom:0px">
+                        <th style="text-align:center;border:0px;">
+                            <a class="navbar-brand"
+                               style="font-size:30px;text-align:center;width:100%;">
+                                海事服务分类</a>
+                        </th>
+                        <tr>
+                            <td v-show="!display">
+                                {% for v in category %}
+<!--                                <a class="btn" href="{{ url_for('home.search_by_category',page=v.id) }}?key={{v.name | safe | replace('&','%26')}}" target="_blank" style="font-size:15px;margin-top:5px;margin-bottom:2px;width:33%;"><b>{{ v.name }}</b></a>-->
+                                <a class="btn" href="{{ url_for('home.search_by_category') }}?category={{ v.id }}&key={{v.name | replace('&','%26') | safe}}" target="_blank" style="font-size:15px;margin-top:5px;margin-bottom:2px;width:33%;"><b>{{v.name}}</b></a>
+                                {% endfor %}
+                            </td>
+                            <td v-show="display">
+                                {% for v in categories %}
+                                <a class="btn" href="{{ url_for('home.search_by_category') }}?category={{ v.id }}&key={{v.name | replace('&','%26') | safe}}" target="_blank" style="font-size:15px;margin-top:5px;margin-bottom:2px;width:33%;"><b>{{v.name}}</b></a>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
+                    <el-row style="text-align:center;">
+                      <el-button type="text" size="small" style="font-size:15px;" v-on:click="show">
+                          <font v-show="!display" style="font-size:15px;">显示更多</font>
+                          <font v-show="display" style="font-size:15px;">隐藏</font>
+                      </el-button>
+                    </el-row>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="margin-top:30px;">
+            <div class="row wow fadeIn" data-wow-delay="0.6s">
+                <div class="col-md-12 table-responsive">
+                    <table class="table text-left" style="border:0px;margin-bottom:0px;padding-bottom:0px">
+                        <th style="text-align:center;border:0px;">
+                            <a class="navbar-brand"
+                               style="font-size:30px;text-align:center;width:100%;">
+                                优质企业</a>
+                        </th>
+                        <tr>
+                            <template>
+                              <el-carousel style="margin-bottom:0px;padding-bottom:0px" :interval="4000" type="card" height="200px">
+                                <el-carousel-item style="background:#FFF;margin:0px;padding:0px" v-for="item in 6" :key="item">
+                                    <a>
+                                  <div class="medium" style="width:100%;height:100%;text-align:center;background:#FFF;">
+                                      <img class="media-object"
+                                           style="width:150px;height:120px;float: center;margin-right: auto;margin-left: auto;"
+                                         src="{{ url_for('static',filename = 'base/images/company.png') }}" >
+                                      <font class="navbar-brand"
+                                           style="font-size:20px;text-align:center;width:100%;color:#000;margin-top:0px;padding-top:5px;">
+                                            中国远洋海运集团有限公司</font>
+                                      <font class="navbar-brand"
+                                           style="font-size:15px;text-align:center;width:100%;color:#003333;padding-top:0px;">
+                                            航运业</font>
+
+                                  </div></a>
+                                </el-carousel-item>
+                              </el-carousel>
+                            </template>
+                        </tr>
+                    </table>
+                        <el-row>
+                          <el-button type="text" size="mini">
+                              <font style="font-size:15px;">显示更多</font>
+                          </el-button>
+                        </el-row>
+                    </div>
+            </div>
+        </div>
+
+        <div class="container" style="margin-top:30px;margin-bottom:40px;">
+                <div class="row wow fadeIn" data-wow-delay="0.6s">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table text-left" style="border:0px;margin-bottom:0px;padding-bottom:0px">
+                            <th style="text-align:center;border:0px;">
+                                <a class="navbar-brand"
+                                   style="font-size:30px;text-align:center;width:100%;">
+                                    热点新闻</a>
+                            </th>
+                            <tr style="border:0px;">
+                                <td style="border:0px;">
+                                <div class="col-md-12">
+                                    {% for v in range(0,4) %}
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a target="_blank" href="{{ url_for('home.news_details_view') }}">
+                                                    <img class="media-object" style="width:131px;height:83px;"
+                                                         src="{{ url_for('static',filename = 'base/images/bunker.jpg') }}" >
+                                                </a>
+                                            </div>
+                                            <div class="media-body"><br>
+                                                <h4 class="media-heading"  style="padding-left:10px;">9月中国新船订单占全球份额65%</h4>
+                                                　　&nbsp;&nbsp;Clarkson最新发布的数据显示，今年9月份，中国共获得30艘新造船订单，共计74万修正总吨，占全球份额的65%，位于第一。
+                                            </div>
+                                            <div class="media-right">
+                                                <a class=" btn-success label label-primary" style="width:20%;" target="_blank" href="{{ url_for('home.news_details_view') }}">
+                                                    <span class="glyphicon glyphicon-book"></span><span>阅读原文</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div></td>
+                            </tr>
+                        </table>
+                            <el-row>
+                              <el-button type="text" size="mini">
+                                  <font style="font-size:15px;">显示更多</font>
+                              </el-button>
+                            </el-row>
+                        </div>
+                </div>
+            </div>
+
+    </section>
+</div>
+{% endblock %}

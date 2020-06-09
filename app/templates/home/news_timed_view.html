@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="zh-cn" style="height:100%;">
+<head>
+    <meta charset="utf-8">
+    <title>定时新闻</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename = 'base/images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static',filename = 'base/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/bootstrap.min.js') }}"></script>
+    <link href="{{ url_for('static',filename = 'summernote/summernote.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static',filename = 'summernote/summernote.js') }}" ></script>
+    <script src="{{ url_for('static',filename = 'base/js/vue.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/axios.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/element-ui.js') }}"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/element-ui.css') }}">
+    <link rel="{{ url_for('static',filename = 'thumbanil/font-awesome.min.css') }}">
+    <link rel="stylesheet prefetch" href="{{ url_for('static',filename = 'thumbanil/prism-twilight.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'thumbanil/style.css') }}">
+    <style>
+    body {
+        background: #fff;
+    }
+    .input-with-select .el-input-group__append {
+        background-color: #fff;
+    }
+    .el-popconfirm__action {
+        text-align: center;
+        margin: 0;
+    }
+    .el-tabs__content {
+        height:calc(100% - 39px);
+        padding:0;
+    }
+    .panel {
+        margin-bottom:0px;
+    }
+    .note-frame {
+        margin-bottom:0px;
+    }
+    .panel-default {
+        margin-bottom:0px;
+    }
+    .note-editor.note-frame.fullscreen  {
+        width:50%!important;
+    }
+    .note-editor.note-frame  {
+        height:calc(100% - 41px)!important;
+        border: 0px;
+    }
+    .note-editing-area  {
+        height:calc(100% - 10px)!important;
+    }
+    .note-codable  {
+        height:100%!important;
+    }
+    .note-editable  {
+        height:100%!important;
+    }
+    .note-status-output {
+        padding:0px!important;
+    }
+    .effects {
+        height: 130px;
+        background:#FFF;
+        border: 1px solid #DCDFE6;
+        border-radius: 4px;
+    }
+    .effects__item {
+        width: 100px !important;
+    }
+    </style>
+</head>
+<body style="height:100%;">
+<!-- 代码 开始 -->
+<div  id="app" style="width:100%;height:100%;" v-cloak>
+    <el-drawer title="新闻详情" :visible.sync="similarView" direction="rtl" :with-header="false" size="50%">
+        <div style="height:100%;width:100%;padding:20px;padding-bottom:20px;" v-html="similarNews.content">
+        </div>
+    </el-drawer>
+    <div style="width:50%;height:100%;float:left;">
+        <div id="summernote" ref="summernote"></div>
+    </div>
+    <div style="background:#CCCCCC;width:50%;height:100%;float:left;position:fixed;right:0;bottom:0;">
+        <el-tabs type="border-card" @tab-click="onTabClick" v-model="tabView" style="width:100%;height:100%;">
+            <el-tab-pane label="标签管理" style="width:100%;height:100%;" name="tabManage">
+                <div style="width:100%;height:100%;overflow-x:hidden;overflow-y:auto;">
+                    <el-form style="width:95%;margin:20px auto;" size="medium" :rules="rules" ref="news" :model="news">
+                        <el-form-item label="新闻标题" prop="title" :label-width="formLabelWidth">
+                            <el-input v-model="news.title" placeholder="请输入新闻标题" ></el-input>
+                        </el-form-item>
+                        <el-form-item label="新闻简介" prop="profile" :label-width="formLabelWidth">
+                            <el-input v-model="news.profile" placeholder="请输入新闻简介" :autosize="{ minRows: 2, maxRows: 6}" type="textarea"></el-input>
+                        </el-form-item>
+                        <el-form-item label="新闻日期" prop="date" :label-width="formLabelWidth">
+                            <div class="block">
+                                <el-date-picker style="width:322px" value-format="yyyy-MM-dd" v-model="news.date" type="date" placeholder="选择日期"></el-date-picker>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="新闻影响" prop="effect" :label-width="formLabelWidth">
+                            <el-select v-model="news.effect" style="width:322px" placeholder="请选择新闻影响">
+                                <el-option label="积极" value="1"></el-option>
+                                <el-option label="消极" value="0"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="新闻类别" prop="category" :label-width="formLabelWidth">
+                            <el-select v-model="news.category" style="width:322px" placeholder="请选择新闻类别">
+                                <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="相关企业" :label-width="formLabelWidth">
+                            <el-input v-model="newsCompany" placeholder='注意: 多个企业之间请以 "&" 号相连！ 例如: 中远&海顺&东方海外' autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="关键词组" prop="keywords" :label-width="formLabelWidth">
+                            <el-select v-model="news.keyword" popper-append-to-body no-data-text="请输入关键词" style="width:100%;" multiple filterable allow-create default-first-option placeholder="请输入企业关键词">
+                                <el-option-group popper-append-to-body v-for="group in suggestion_keyword" :key="group.label" :label="group.label">
+                                    <el-option popper-append-to-body v-for="keyword in group.options" :key="keyword" :label="keyword" :value="keyword"></el-option>
+                                </el-option-group>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="缩略图组"  :label-width="formLabelWidth">
+                            <div class="effects">
+                                <template>
+                                    <el-popconfirm title="是否删除此图片？" @onconfirm="deleteThumbnail(src, index)" placement="top" v-for="(src, index) in newsThumbnailList" v-bind:key="src">
+                                            <a style="width:110px;height:110px;" href="javascript:void(0);" slot="reference">
+                                                <img style="width:100px;height:100px;margin:0 10px;" :src="src" fit="contain"/>
+                                            </a>
+                                    </el-popconfirm>
+                                </template>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div style="text-align:center;">
+                                <el-button type="success" @click="addNewsBtn">提 交</el-button>
+                            </div>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="相似新闻" style="width:100%;height:100%;" name="similarNews">
+                <template style="text-align:center;">
+                    <el-table :data="similarNewsList" border style="text-align:center;width:100%;" highlight-current-row height="100%">
+                        <el-table-column fixed prop="date" label="日期" width="95"></el-table-column>
+                        <el-table-column prop="title" label="标题"></el-table-column>
+                        <el-table-column width="65" prop="similar" label="相似度">
+                        </el-table-column>
+                        <el-table-column width="100" label="操作">
+                            <template slot-scope="scope" style="display:inline-block;">
+                                <el-button type="success" icon="el-icon-view" size="mini" @click="watchNewsDetails(scope)">查看</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane label="目标网站" style="width:100%;height:100%;" name="targetWebSite">
+                <iframe style="width:100%;float:left;height:100%;" :src="targetNewsUrl"></iframe>
+<!--                <iframe style="width:100%;float:left;height:100%;"></iframe>-->
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+    <div style="width:100px;height:39px;float:left;position:fixed;right:0;top:0;">
+        <el-button type="primary" @click="timedNewsList">新闻列表</el-button>
+    </div>
+    <el-drawer title="定时新闻" :visible.sync="newsView" direction="ltr" :with-header="false" size="85%">
+        <div style="height:100%;display: flex;align-items: center;justify-content: center;overflow:auto;">
+            <div style="width:3%;height:96%;padding-left:1%;">
+                <div style="color:#0099FF;font-size:20px;">定</div>
+                <div style="color:#0099FF;font-size:20px;">时</div>
+                <div style="color:#0099FF;font-size:20px;">新</div>
+                <div style="color:#0099FF;font-size:20px;">闻</div>
+            </div>
+            <template>
+                  <el-table :data="manageNewsList" v-loadmore="timedNewsPage" border height="100%" size="mini" highlight-current-row @row-click="timedNewsRow">
+                    <el-table-column fixed prop="id" label="ID"width="50"></el-table-column>
+                    <el-table-column fixed prop="date" label="时间" width="100"></el-table-column>
+                    <el-table-column prop="title" label="标题" width="300"></el-table-column>
+                    <el-table-column prop="profile" label="内容简介"></el-table-column>
+                    <el-table-column prop="keyword" label="关键词" width="80"></el-table-column>
+                    <el-table-column prop="company" label="企业" width="300"></el-table-column>
+                    <el-table-column label="来源" width="60">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.source == 1">百度</div>
+                            <div v-else>谷歌</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="状态" width="60">
+                      <template slot-scope="scope">
+                        <a v-if="scope.row.status == 1" class="btn btn-success btn-xs" style="font-size:10px;">已读</a>
+                        <a v-else class="btn btn-danger btn-xs" style="font-size:10px;">未读</a>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="96">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="light" content="编辑新闻" placement="left">
+                                <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="editNews(scope)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="阅读原文" placement="right">
+                                <el-button type="success" icon="el-icon-view" circle size="mini" @click="watchOriginalNews(scope)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                  </el-table>
+            </template>
+        </div>
+    </el-drawer>
+</div>
+<script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        fullscreen:true,
+        styleWithSpan: false,
+        toolbar: [
+            ['style', ['style']],
+            //['font', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['bold', 'italic', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['paragraph']],
+            ['height', ['height']],
+            //['table', ['table']],
+            //['insert', ['link', 'picture', 'hr']],
+            ['insert', ['picture']],
+            //['view', ['fullscreen', 'codeview']],
+            ['view', ['codeview']],
+            ['help', ['help']]
+        ],
+        callbacks: {
+            onImageUpload: function(files) {
+                // upload image to server and create imgNode...
+                saveImage(files);
+            },
+            onMediaDelete: function(target) {
+                deleteImage(target.context.currentSrc);
+            }
+        }
+    });
+    function saveImage(files) {
+        let imageData = new FormData();
+        imageData.append("imageData", files[0]);
+        imageData.append("name", "Tom");
+        var type = 1;
+        $.ajax({
+            url: `/news/image/${type}/`, // 图片上传url
+            type: 'POST',
+            data: imageData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',     // 以json的形式接收返回的数据
+            // 图片上传成功
+            success: function ($result) {
+                let imgNode = document.createElement("img");
+                imgNode.src = $result.img;
+                $('#summernote').summernote('insertNode', imgNode);
+            },
+            // 图片上传失败
+            error: function () {
+                console.log('图片上传失败');
+            }
+        });
+    };
+    function deleteImage(currentSrc) {
+        $.ajax({
+            url: `/news/image/delete/?img_name=${currentSrc}`, // 图片上传url
+            type: 'GET',
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',     // 以json的形式接收返回的数据
+            // 图片上传成功
+            success: function ($result) {
+                console.log($result);
+            },
+            // 图片上传失败
+            error: function () {
+                console.log($result);
+            }
+        });
+    };
+});
+</script>
+<script>
+    var app = new Vue({
+        delimiters: ['{[', ']}'],
+        directives : {
+            loadmore : {
+                bind(el, binding) {
+                    const selectWrap = el.querySelector('.el-table__body-wrapper')
+                    selectWrap.addEventListener('scroll', function() {
+                        let sign = 0
+                        const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+                        if (scrollDistance <= sign) {
+                            binding.value()
+                        }
+                    })
+                }
+            }
+        },
+        el: '#app',
+        data: {
+            categories: [],
+            title: '新加坡新闻',
+            similarView: false,
+            newsView: false,
+            tabView: 'tabManage',
+            similarNews: {},
+            suggestion_keyword: [{label: '请输入关键词',options: []}],      //新闻关键词选择列表
+            manageNewsList: [],
+            currentNewsUrl: '',     //当前定时新闻链接
+            targetNewsUrl: '',     //目标定时新闻链接
+            newsThumbnailList: [],
+            similarNewsList: [],
+            newsCompany: '',
+            targetWebsite: '',
+            news: {
+              title: '',
+              profile: '',
+              date: '',
+              effect: null,
+              category: null,
+              company: 0,
+              keyword: []
+            },
+            overviewCurrentPage: 1,
+            overviewTotalPage: 0,
+            rules: {
+                title: [
+                    { required: true, message: '请输入新闻标题', trigger: 'change' }
+                ],
+                profile: [
+                    { required: true, message: '请输入新闻简介', trigger: 'change' }
+                ],
+                date: [
+                    { required: true, message: '请选择新闻日期', trigger: 'change' }
+                ],
+                effect: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                category: [
+                     { required: true, message: '请选择新闻类别', trigger: 'change' }
+                ],
+                keyword: [
+                    { type: 'array', required: true, message: '请输入新闻关键词', trigger: ['blur', 'change'] }
+                ]
+            },
+            formLabelWidth: '80px'
+        },
+        methods: {
+            sleep(ms) {
+                return new Promise(resolve =>
+                    setTimeout(resolve, ms)
+                )
+            },
+            validate_disappear() {
+                console.log('open before');
+            },
+            //删除缩略图
+            deleteThumbnail(src, index) {
+                //console.log(src);
+                //console.log(index);
+                let code=$("#summernote").summernote("code");
+                let img = $('<div>'+code+'</div>').find('img');
+                for (i = 0; i < img.length; i++) {
+                    if(img[i].src == src){
+                        const div = document.createElement("div");
+                        div.appendChild(img[i]);
+                        //console.log('删除图片\n'+div.innerHTML);
+                        console.log(img[i].src);
+                        axios.get(`/news/image/delete/?img_name=${img[i].src}`).then((res) => { console.log(res.data); });
+                        //console.log(typeof img[i].src);
+                        //axios.get(`/news/details/${id}/`);
+                        let value = code.replace(div.innerHTML,"");
+                        $('#summernote').summernote('reset');
+                        $('#summernote').summernote('code',value);
+                        this.newsThumbnailList.splice(index, 1);
+                    }
+                }
+            },
+            //标签页点击事件
+            onTabClick(tab) {
+                if ( tab.name == 'tabManage' ) {
+                    //console.log(tab.name);
+                    this.newsThumbnailList = [];
+                    let code=$("#summernote").summernote("code");
+                    let img = $('<div>'+code+'</div>').find('img');
+                    //console.log(img.length);
+                    for (i = 0; i < img.length; i++) {
+                        this.newsThumbnailList.push(img[i].src)
+                    }
+                    return false;
+                };
+                if ( tab.name == 'targetWebSite' ) {
+                    if(this.currentNewsUrl == ''){this.$message({ type: 'info', message: '请选择新闻进行查看!' }); return false;}
+                    this.targetNewsUrl = this.currentNewsUrl;
+                };
+            },
+            //操作日志
+            addOperations(action,content,annotation) {
+                const operation =  { action: action, content: content, annotation: annotation };
+                const url = `/operations/add/`;
+                axios.post(url,operation).then( (res) => {
+                    console.log(res.data);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            //点击定时新闻行事件
+            timedNewsRow(row) {
+                this.currentNewsUrl = row.url;
+            },
+            //定时新闻列表
+            timedNewsList() {
+                this.newsView = true;
+                if(this.manageNewsList.length != 0) {return false;}
+                this.sleep(500).then(()=>{
+                    const url = `/overview_by_system/`;
+                    axios.get(url).then(
+                        Response => {
+                            const result = Response.data
+                            this.manageNewsList = result.overviews
+                            this.overviewTotalPage = result.total_page
+                        }).catch(error => {
+                            console.log('error');
+                        });
+                });
+            },
+            //分页获取定时新闻列表
+            timedNewsPage() {
+                if(this.overviewCurrentPage < this.overviewTotalPage){//当前页数小于总页数就请求
+                    this.overviewCurrentPage++;//当前页数自增
+                }else{
+                    return false;
+                }
+                page = {'page_index':this.overviewCurrentPage,'page_size':30};
+                const url = `/overview_by_system/paging`;
+                axios.post(url,page).then(
+                    Response => {
+                        const result = Response.data
+                        this.manageNewsList.push.apply(this.manageNewsList,result);
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            watchNewsDetails(scope) {
+                //const id = scope.row.id;
+                const id = 1;
+                const url = `/news/details/${id}/`;
+                this.similarNews = {};
+                this.similarView = true;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.similarNews = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            addNewsBtn() {
+                if ($('#summernote').summernote('isEmpty')) {
+                    this.$message({ type: 'info', message: '新闻内容不可为空，请编辑新闻内容!' });
+                    return false;
+                };
+                this.$refs.news.validate((valid) => {
+                    if (valid) {
+                        this.addNews();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            editNews(scope) {
+                const id = scope.row.id;
+                this.manageNewsList[scope.$index].status = 1;
+                this.newsStatusChange(id);
+                this.addOperations('编辑新闻',scope.row.title,scope.row.url);
+                this.getOverview(id);
+            },
+            watchOriginalNews(scope) {
+                this.manageNewsList[scope.$index].status = 1;
+                this.newsStatusChange(scope.row.id);
+                window.open(scope.row.url)
+            },
+            newsStatusChange(id) {
+                const url = `/news/status/change/${id}`;
+                axios.get(url).then(
+                    Response => {
+                        console.log('新闻状态修改成功!');
+                    }).catch(error => {
+                        console.log('新闻状态修改失败!');
+                    });
+            },
+            addNews() {
+                let markupStr = $('#summernote').summernote('code');
+                const news =  {
+                    title: this.news.title,
+                    profile: this.news.profile,
+                    date: this.news.date,
+                    effect: this.news.effect,
+                    category: this.news.category,
+                    company: this.news.company,
+                    keyword: this.news.keyword,
+                    content: markupStr
+                };
+                console.log(news);
+                const url = `/news/add/`;
+                axios.post(url,news).then( (res) => {
+                    console.log(res.data);
+                    if(res.data.status == 'repeat'){
+                        this.similarNewsList = res.data.similar_news_list;
+                        this.$message({ type: 'info', message: '新闻内容重复，请检查相似新闻哦!' });
+                    }if(res.data.status == 'error'){
+                        this.$message({ type: 'info', message: '新闻信息出错，请仔细检查哦!' });
+                    }if(res.data.status == 'no'){
+                        this.$message({ type: 'info', message: '暂无企业信息，请前往企业管理新增企业!' });
+                    }if(res.data.status == 'ok') {
+                        this.$message({ type: 'success', message: '提交企业信息成功!' });
+                        this.news = { title: '', profile: '', date: '', effect: null, category: null, company: 0, keywords: [] };
+                        this.newsThumbnailList = [];
+                        this.newsCompany = '';
+                        $('#summernote').summernote('reset');
+                        this.$nextTick(()=>{
+                            this.$refs.news.clearValidate();
+                        });
+                    };
+                }).catch(function (error) {
+                    console.log(error);
+                    this.$message({ type: 'info', message: '新闻信息出错，请仔细检查哦!' });
+                });
+            },
+            //获取分类
+            getCategory() {
+                const url = `/categories/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.categories = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+            },
+            //新闻概览
+            getOverview(id) {
+                this.targetWebsite = '';
+                const url = `/overview/detail/${id}/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.news.title = result.overview.title;
+                        this.news.profile = result.overview.profile;
+                        this.news.date = result.overview.date;
+                        this.news.company = result.overview.company_id;
+                        this.news.keyword = [];
+                        this.news.keyword.push(result.overview.keyword);
+                        console.log(this.news.keyword);
+                        this.newsCompany = result.companyName;
+                        this.targetWebsite = result.overview.url;
+                        this.$nextTick(()=>{
+                            this.$refs.news.clearValidate();
+                        });
+                    this.newsView = false;
+                }).catch(error => {
+                    console.log('error');
+                });
+            },
+        },
+        mounted() {
+            this.getCategory();
+        }
+    });
+</script>
+<!-- 代码 结束 -->
+</body>
+</html>

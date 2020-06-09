@@ -1,0 +1,850 @@
+
+
+
+
+2020-05-15 10:05:05 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 170, in default_hourly_news
+    hourly_news_list.extend(analysis.NewsByBaidu.analysis_html(company_name, keyword, para['id']))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 33, in analysis_html
+    doc = pq(NewsByBaidu.search_news(company_name, key))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 14, in search_news
+    search_key = key + " " + company_name.slipt()[0]
+AttributeError: 'str' object has no attribute 'slipt'
+
+
+
+
+2020-05-15 10:09:10 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:10:31 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:10:35 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:16:44 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:48:54 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 170, in default_hourly_news
+    hourly_news_list.extend(analysis.NewsByBaidu.analysis_html(abbr, keyword, para['id']))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 33, in analysis_html
+    doc = pq(NewsByBaidu.search_news(abbr, key))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 15, in search_news
+    search_key = abbr + " " + key
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+
+
+
+
+2020-05-15 10:49:04 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 723, in __getattr__
+    return getattr(self.comparator, key)
+AttributeError: 'Comparator' object has no attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 227, in __getattr__
+    return getattr(self.comparator, key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 949, in __getattr__
+    return self._fallback_getattr(key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\properties.py", line 312, in _fallback_getattr
+    return getattr(self.__clause_element__(), key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 727, in __getattr__
+    % (type(self).__name__, type(self.comparator).__name__, key)
+AttributeError: Neither 'AnnotatedColumn' object nor 'Comparator' object has an attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1164, in update_company
+    db.session.query(Company).filter(Company.abbr == None).update({Company.found_time: Company.name.split()[0]})
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 236, in __getattr__
+    key,
+AttributeError: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with Company.name has an attribute 'split'
+
+
+
+
+2020-05-15 10:49:05 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:49:49 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 723, in __getattr__
+    return getattr(self.comparator, key)
+AttributeError: 'Comparator' object has no attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 227, in __getattr__
+    return getattr(self.comparator, key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 949, in __getattr__
+    return self._fallback_getattr(key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\properties.py", line 312, in _fallback_getattr
+    return getattr(self.__clause_element__(), key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 727, in __getattr__
+    % (type(self).__name__, type(self.comparator).__name__, key)
+AttributeError: Neither 'AnnotatedColumn' object nor 'Comparator' object has an attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1164, in update_company
+    db.session.query(Company).filter(Company.abbr == None).update({Company.abbr: Company.name.split()[0]})
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 236, in __getattr__
+    key,
+AttributeError: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with Company.name has an attribute 'split'
+
+
+
+
+2020-05-15 10:49:50 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:50:23 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:50:23 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 170, in default_hourly_news
+    hourly_news_list.extend(analysis.NewsByBaidu.analysis_html(abbr, keyword, para['id']))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 33, in analysis_html
+    doc = pq(NewsByBaidu.search_news(abbr, key))
+  File "C:\Users\Kirits\Desktop\News\app\home\analysis.py", line 15, in search_news
+    search_key = abbr + " " + key
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+
+
+
+
+2020-05-15 10:51:42 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 723, in __getattr__
+    return getattr(self.comparator, key)
+AttributeError: 'Comparator' object has no attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 227, in __getattr__
+    return getattr(self.comparator, key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 949, in __getattr__
+    return self._fallback_getattr(key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\properties.py", line 312, in _fallback_getattr
+    return getattr(self.__clause_element__(), key)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 727, in __getattr__
+    % (type(self).__name__, type(self.comparator).__name__, key)
+AttributeError: Neither 'AnnotatedColumn' object nor 'Comparator' object has an attribute 'split'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1164, in update_company
+    db.session.query(Company).filter(Company.abbr == None).update({Company.abbr: Company.name.split()[0]})
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 236, in __getattr__
+    key,
+AttributeError: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with Company.name has an attribute 'split'
+
+
+
+
+2020-05-15 10:51:42 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:55:44 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1166, in update_company
+    company.update({Company.abbr: company.name.split()[0]})
+AttributeError: 'Company' object has no attribute 'update'
+
+
+
+
+2020-05-15 10:55:44 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 10:55:45 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1166, in update_company
+    company.update({Company.abbr: company.name.split()[0]})
+AttributeError: 'Company' object has no attribute 'update'
+
+
+
+
+2020-05-15 11:18:59 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1164, in update_company
+    view_model = model_for_post()
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 46, in model_for_post
+    data = eval(str(request.data, encoding="utf-8").replace('null', '\"\"'))
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+
+
+
+2020-05-15 11:19:00 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 13:22:06 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1183, in update_company
+    update_company(page_index, page_size)
+TypeError: update_company() takes 0 positional arguments but 2 were given
+
+
+
+
+2020-05-15 13:35:40 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 1082, in send_static_file
+    self.static_folder, filename, cache_timeout=cache_timeout
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\helpers.py", line 767, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 20:27:13 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 583, in connect
+    **kwargs)
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 727, in create_connection
+    raise err
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 716, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10065] 套接字操作尝试一个无法连接的主机。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 648, in index
+    categories = Category.query.all()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3233, in all
+    return list(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3389, in __iter__
+    return self._execute_and_instances(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3411, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3426, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3404, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1133, in connection
+    execution_options=execution_options,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1139, in _connection_for_bind
+    engine, execution_options
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 432, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2242, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2280, in _wrap_pool_connect
+    e, dialect, self
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1547, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+
+
+
+2020-05-15 20:27:14 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 20:27:40 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 583, in connect
+    **kwargs)
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 727, in create_connection
+    raise err
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 716, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10065] 套接字操作尝试一个无法连接的主机。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 648, in index
+    categories = Category.query.all()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3233, in all
+    return list(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3389, in __iter__
+    return self._execute_and_instances(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3411, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3426, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3404, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1133, in connection
+    execution_options=execution_options,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1139, in _connection_for_bind
+    engine, execution_options
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 432, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2242, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2280, in _wrap_pool_connect
+    e, dialect, self
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1547, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+
+
+
+2020-05-15 20:27:40 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 20:27:50 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 583, in connect
+    **kwargs)
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 727, in create_connection
+    raise err
+  File "C:\Users\Kirits\AppData\Local\Programs\Python\Python37\lib\socket.py", line 716, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10065] 套接字操作尝试一个无法连接的主机。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1072, in company_news_update_view
+    details = Company.query.filter_by(id=id).first()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3287, in first
+    ret = list(self[0:1])
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3065, in __getitem__
+    return list(res)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3389, in __iter__
+    return self._execute_and_instances(context)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3411, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3426, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3404, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1133, in connection
+    execution_options=execution_options,
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1139, in _connection_for_bind
+    engine, execution_options
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\orm\session.py", line 432, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2242, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2280, in _wrap_pool_connect
+    e, dialect, self
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1547, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2276, in _wrap_pool_connect
+    return fn()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\util\compat.py", line 153, in reraise
+    raise value
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\pool\base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\sqlalchemy\engine\default.py", line 489, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '139.196.95.50' ([WinError 10065] 套接字操作尝试一个无法连接的主机。)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+
+
+
+2020-05-15 20:27:50 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+
+
+2020-05-15 20:27:52 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1925, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1907, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\ctx.py", line 350, in match_request
+    result = self.url_adapter.match(return_rule=True)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\werkzeug\routing.py", line 1945, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.

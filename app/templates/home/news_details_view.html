@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title>新闻详情</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename = 'base/images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/bootstrap-movie.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/animate.css') }}">
+    <script src="{{ url_for('static',filename = 'base/js/vue.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/axios.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'base/js/element-ui.js') }}"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'base/css/element-ui.css') }}">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .navbar-brand>img {
+            display: inline;
+        }
+        body {
+            height: 100%;
+        }
+        html {
+            height: 100%;
+        }
+        .inner-div {
+            width:100%;
+            margin-top:40px;
+            padding:70px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, .12);
+        }
+        .news-div {
+            width:100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 2px 6px rgba(0, 0, 0, .12);
+        }
+        .hr_news {/*透明渐变水平线*/
+            margin:0 auto;width:1170px;
+            margin-top:40px;
+            border: 0;
+            height: 4px;
+            background: #333;
+            background-image: linear-gradient(to right, grey, #333, rgb(9, 206, 91));
+        }
+    </style>
+</head>
+
+<body>
+<!--导航-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container" >
+        <!--小屏幕导航按钮和logo-->
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{{ url_for('home.index',page = 1) }}" class="navbar-brand" style="width:350px;">
+                <img src="{{ url_for('static',filename = 'base/images/logo.png') }}" style="height:40px;">&nbsp;海事服务企业大数据
+            </a>
+        </div>
+        <!--小屏幕导航按钮和logo-->
+        <!--导航-->
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-left" role="search" style="margin-top:18px;">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" placeholder="请输入搜索关键词" id="key_movie" value="{{ key }}" style="width:210px;">
+                    <input type="text" style="display:none;">
+                    <span class="input-group-btn">
+                        <a class="btn btn-default" id="do_search"><span class="glyphicon glyphicon-search"></span>&nbsp;搜索 </a>
+                    </span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if "user" not in session %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.login') }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.register') }}"><span class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
+                </li>
+                {% endif %}
+                {% if "user" in session %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.logout') }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.user') }}"><span class="glyphicon glyphicon-user"></span>&nbsp;用户</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a class="curlink" target="_blank" href="{{ url_for('home.system') }}"><span class="glyphicon glyphicon-home"></span>&nbsp;系统</a>
+                </li>
+            </ul>
+        </div>
+        <!--导航-->
+    </div>
+</nav>
+<!--导航-->
+<div id="app" v-cloak style="height:100%;">
+    <!--内容-->
+    <div class="container" style="margin-top:0px">
+        <div class="row">
+            <div class="col-md-12 inner-div">
+                    <div  class="" style="" v-html="newsDetail.content"></div>
+            </div>
+        </div>
+    <!--内容-->
+    <!--底部-->
+    </div>
+
+    <div style="width:100%">
+        <div style="width:1170px;margin:20px auto;margin-top:60px">
+            <a class="navbar-brand" style="font-size:40px;height:70px;width:100%;margin:0 auto;padding-bottom:30px;">相关推荐</a>
+        </div>
+        <hr class="hr_news">
+    </div>
+    <div class="container" style="margin-top:0px;">
+        <div class="col-md-12">
+                <table class="table text-left" style="border:2px;margin:0 auto;padding-bottom:0px">
+                    <th style="text-align:center;border:0px;">
+<!--                        <a class="navbar-brand" style="font-size:30px;text-align:center;width:100%;">相关推荐</a>-->
+                    </th>
+                    <tr style="border:0px;">
+                        <td style="border:0px;">
+                        <div class="col-md-12">
+                            {% for v in range(0,4) %}
+                                <div class="media" style="padding:5px; border:1px transparent solid; border-image:linear-gradient(to right,#000718,#23b7cb) 1 10;">
+                                    <div class="media-left">
+                                        <a target="_blank" href="{{ url_for('home.news_details_view') }}">
+                                            <img class="media-object" style="width:131px;height:83px;"
+                                                 src="{{ url_for('static',filename = 'base/images/bunker.jpg') }}" >
+                                        </a>
+                                    </div>
+                                    <div class="media-body"><br>
+                                        <h4 class="media-heading"  style="padding-left:10px;">9月中国新船订单占全球份额65%</h4>
+                                        　　&nbsp;&nbsp;Clarkson最新发布的数据显示，今年9月份，中国共获得30艘新造船订单，共计74万修正总吨，占全球份额的65%，位于第一。
+                                    </div>
+                                    <div class="media-right">
+                                        <a class=" btn-success label label-primary" style="width:20%;" href="{{ url_for('home.news_details_view') }}">
+                                            <span class="glyphicon glyphicon-book"></span><span>阅读原文</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div></td>
+                    </tr>
+                </table>
+            </div>
+    </div><br><br><br>
+    <footer ref="bar" class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        版权所有©2009-2020 上海莫瑞斯柯信息技术有限公司
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+<!--底部-->
+<script src="{{ url_for('static',filename = 'base/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/jquery.singlePageNav.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'base/js/wow.min.js') }}"></script>
+<script src="{{ url_for('static',filename = 'lazyload/jquery.lazyload.min.js') }}"></script>
+<script src="//cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+<script>
+    $(function() {
+        new WOW().init();
+    })
+    $(document).ready(function() {
+        $("img.lazy").lazyload({
+            effect: "fadeIn"
+        });
+        $("#do_search").click(function () {
+            var key=$("#key_movie").val();
+            location.href = "{{ url_for('home.search',page=1) }}?key="+key;
+        });
+    });
+    $("#key_movie").on("keydown", function(event){
+    　　var key = event.which;
+    　　if(key == 13){
+            var key=$("#key_movie").val();
+            location.href = "{{ url_for('home.search',page=1) }}?key="+key;
+    　　}
+    });
+</script>
+<!-- 引入组件库 -->
+<script>
+    var Main = {
+        delimiters: ['{[', ']}'],
+        data() {
+            return {
+                id: 0,
+                newsDetail: {}
+            };
+        },
+        methods: {
+            //查看原文
+            watchNewsDetails(id) {
+                this.newsDetail = {};
+                const url = `/news/details/${id}/`;
+                axios.get(url).then(
+                    Response => {
+                        const result = Response.data
+                        this.newsDetail = result
+                    }).catch(error => {
+                        console.log('error');
+                    });
+                this.newsInner = true;
+            }
+        },
+        mounted() {
+            this.id = {{ id }};
+            this.watchNewsDetails(1);
+            this.$refs.bar.style.background="#CCCCCC";
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+</body>
+</html>

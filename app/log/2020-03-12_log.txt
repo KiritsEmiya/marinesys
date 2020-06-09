@@ -1,0 +1,96 @@
+
+
+
+
+2020-03-12 14:25:12 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1014, in search
+    little_company_list=little_company_list)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 138, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 930, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 883, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 857, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\loaders.py", line 129, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 638, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\search.html", line 203, in template
+    {{ company_count_i | str}}
+jinja2.exceptions.TemplateAssertionError: no filter named 'str'
+
+
+
+
+2020-03-12 14:25:27 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1014, in search
+    little_company_list=little_company_list)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 138, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 930, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 883, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 857, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\loaders.py", line 129, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 638, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\search.html", line 203, in template
+    {{ company_count_i | str}}
+jinja2.exceptions.TemplateAssertionError: no filter named 'str'
+
+
+
+
+2020-03-12 14:32:17 出现异常
+
+Traceback (most recent call last):
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\Kirits\Desktop\News\app\home\views.py", line 1014, in search
+    little_company_list=little_company_list)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\flask\templating.py", line 138, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 930, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 883, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 857, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\loaders.py", line 129, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 638, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\Kirits\Desktop\News\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\Kirits\Desktop\News\app\templates\home\search.html", line 203, in template
+    {{ company_count_i | str}}
+jinja2.exceptions.TemplateAssertionError: no filter named 'str'
