@@ -26,7 +26,7 @@ class Flask(_Flask):
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:997374@139.196.95.50/oceans?charset=utf8'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:000000@127.0.0.1/oceans?charset=utf8'
 app.config["SECRET_KEY"] = 'f00cd2a8351943b4a52573fcbb3a4c97'
 app.config['JSON_AS_ASCII'] = False
 app.config["FC_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
